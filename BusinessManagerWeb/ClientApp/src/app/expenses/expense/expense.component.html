@@ -1,0 +1,127 @@
+<div class="page-header">
+  <h3 class="page-title">
+    {{pageTitle}}
+  </h3>
+</div>
+
+<div class="row">
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="card-title">Add Expense</h6>
+        <!-- <p class="card-description">
+          Expense Form
+        </p> -->
+        <hr/>
+        <div class="forms-sample">
+          <form novalidate [formGroup]="newExpenseForm" (ngSubmit)="saveExpense()">
+
+            <!-- <div class="form-inline"> -->
+              <div class="form-group">
+                <label for="expenseDateId">Select Date</label>
+                <div class="form-inline">
+                    <input type="text" class="form-control" placeholder="DD/MM/YYYY"
+                    formControlName="expenseDate" ngbDatepicker #d2="ngbDatepicker">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary mdi mdi-calendar" (click)="d2.toggle()" type="button"></button>
+                    </div>
+                    <hr/>
+                    <!-- <button class="btn btn-sm btn-outline-primary" (click)="model2 = today">Select Today</button> -->
+                    <hr/>
+                </div>
+                <span class="invalid-feedback">
+                  {{displayMessage.expenseDate}}
+                </span>
+              </div>
+            <!-- </div> -->
+
+
+            <div class="form-group">
+              <label for="amountId">Amount</label>
+              <input type="number" class="form-control"
+              id="amountId" placeholder="Amount (required)"
+              formControlName="amount" [ngClass]="{'is-invalid': displayMessage.amount }">
+              <span class="invalid-feedback">
+                {{displayMessage.amount}}
+              </span>
+            </div>
+
+            <div class="form-group">
+              <label for="descriptionId">Description</label>
+              <textarea type="text" class="form-control"
+              id="descriptionId" placeholder="Description (required)"
+              formControlName="description" [ngClass]="{'is-invalid': displayMessage.description }">
+            </textarea>
+              <span class="invalid-feedback">
+                {{displayMessage.description}}
+              </span>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-rounded btn-fw mr-2"
+            [title]="newExpenseForm.valid ? 'Save Entry': 'Disabled until form data is valid'"
+            [disabled]="!newExpenseForm.valid">
+              Submit
+          </button>
+            <button class="btn btn-light btn-rounded btn-fw"
+            title="Cancel Entry"
+            (click)="cancelEntry()">Cancel</button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="card-title">Daily Expense List</h6>
+        <hr/>
+       <div class="row">
+        <div class="col-sm-4">
+          <!-- <span class="btn btn-sm btn-primary btn-rounded btn-fw"
+                      title="Filter"
+                      (click)="GetTodaysExpenses()">
+                Get Today's Expenses
+          </span> -->
+         </div>
+         <div class="col-sm-4">
+            <!-- <span class="btn btn-sm btn-secondary btn-rounded btn-fw">
+              D-E-T is {{expensesTotal}}
+            </span> -->
+         </div>
+         <div class="col-sm-4">
+          <span class="btn btn-sm btn-primary btn-rounded btn-fw"
+                      title="Filter"
+                      (click)="GetTodaysExpenses()">
+                Get Today's Expenses
+          </span>
+         </div>
+       </div>
+       <hr/>
+        <div class="table-responsive">
+          <table class="table table-hover table-bordered">
+            <thead>
+              <tr>
+                <th class="font-weight-bold">Description</th>
+                <th class="font-weight-bold">Date</th>
+                <th class="font-weight-bold">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let ex of allExpenses">
+                <td><label >{{ex.description}}</label></td>
+                <td><label >{{ex.expenseDate}}</label></td>
+                <td><label class="badge badge-secondary p-2">{{ex.amount}}</label></td>
+              </tr>
+              <tr>
+                <td class="font-weight-bold">Total</td>
+                <td><label class="badge badge-success p-2">{{expensesTotal}}</label></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

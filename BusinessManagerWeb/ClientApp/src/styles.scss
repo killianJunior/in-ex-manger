@@ -1,0 +1,59 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Provide sufficient contrast against white background */
+
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import './assets/scss/variables';
+@import "~compass-mixins/lib/compass";
+@import "~compass-mixins/lib/animate";
+@import "~bootstrap/scss/bootstrap";
+@import "./assets/scss/fonts";
+@import "./assets/scss/functions";
+
+
+/* === Icon fonts === */
+@import "~@mdi/font/scss/materialdesignicons";
+// @import "~font-awesome/scss/font-awesome";
+// @import "~flag-icon-css/sass/flag-icon";
+@import "~simple-line-icons/scss/simple-line-icons";
+
+
+/* === Core Styles === */
+// @import "./assets/scss/typography";
+@import "./assets/scss/reset";
+@import "./assets/scss/responsive";
+@import "./assets/scss/misc";
+@import "./assets/scss/utilities";
+@import "./assets/scss/demo";
+@import "./assets/scss/spinner";
+
+/* === Components === */
+@import "./assets/scss/components/modal";
+@import "./assets/scss/components/forms";
+@import "./assets/scss/components/checkbox-radio";
+@import "./assets/scss/components/icons";
+@import "./assets/scss/components/tables";
+// @import "./assets/scss/components/buttons";
+// @import "./assets/scss/components/breadcrumbs";
+// @import "./assets/scss/components/badges";
+// @import "./assets/scss/components/cards";
+// @import "./assets/scss/components/preview";
+// @import "./assets/scss/components/popovers";
+// @import "./assets/scss/components/lists";
+// @import "./assets/scss/components/bootstrap-progress";
+// @import "./assets/scss/components/dropdowns";
+// @import "./assets/scss/components/pagination";
+// @import "./assets/scss/components/loaders/loaders";
+// @import "./assets/scss/components/portfolio";
+// @import "./assets/scss/components/date-picker";
+// @import "./assets/scss/components/daterange-picker";
+
+// @import "./assets/scss/components/landing-screens/auth";
+
+/* === Layout === */
+@import "./assets/scss/layout";
+
+@import '~ngx-toastr/toastr';
+@import '~bootstrap/scss/mixins';
+@import '~ngx-toastr/toastr-bs4-alert';

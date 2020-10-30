@@ -1,0 +1,76 @@
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
+  <ul class="nav">
+    <!-- <li class="nav-item navbar-brand-mini-wrapper">
+      <a class="nav-link navbar-brand brand-logo-mini" href="index.html"><img src="assets/images/logo-mini.svg" alt="logo" /></a>
+    </li> -->
+    <!-- User Profile -->
+    <li class="nav-item nav-profile">
+      <a routerLink="/dashboard" class="nav-link">
+        <div class="profile-image">
+          <img class="img-xs rounded-circle" src="assets/images/unidentified_user.jpg" alt="profile image">
+          <div class="dot-indicator bg-warning"></div>
+          <!-- If user identified use dot-indicator bg-success -->
+          <!-- <img class="img-xs rounded-circle" src="assets/images/unidentified_user.jpg" alt="profile image">
+          <div class="dot-indicator bg-success"></div> -->
+        </div>
+        <div class="text-wrapper">
+          <p class="profile-name">Henry Klein</p>
+          <p class="designation" translate>Administrator</p>
+        </div>
+        <!-- <div class="icon-container">
+          <i class="icon-bubbles"></i>
+          <div class="dot-indicator bg-danger"></div>
+        </div> -->
+      </a>
+    </li>
+
+    <li class="nav-item nav-category">
+      <span class="nav-link" translate>Dashboard</span>
+    </li>
+    <li class="nav-item" [ngClass]="{ 'active': dashboard.isActive }">
+      <a class="nav-link" routerLink="/dashboard" routerLinkActive #dashboard="routerLinkActive" [routerLinkActiveOptions]="{exact:
+        true}">
+        <span class="menu-title" translate>Dashboard</span>
+        <i class="icon-screen-desktop menu-icon"></i>
+      </a>
+    </li>
+    <li class="nav-item nav-category"><span class="nav-link" translate>Components</span></li>
+    <li class="nav-item" [ngClass]="{'active' : buttons.isActive || dropdowns.isActive }">
+      <a class="nav-link" (click)="incomeElementsCollapsed = !incomeElementsCollapsed" [attr.aria-expanded]="incomeElementsCollapsed" aria-controls="ui-basic">
+        <span class="menu-title" translate>Income</span>
+        <i class="icon-layers menu-icon"></i>
+      </a>
+      <div class="collapse" id="ui-basic" [ngbCollapse]="!incomeElementsCollapsed">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" routerLink="/dailyincome" routerLinkActive="active" #buttons="routerLinkActive" translate>Daily Income</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="/incomehistory" routerLinkActive="active" #dropdowns="routerLinkActive" translate>Recent History</a></li>
+        </ul>
+      </div>
+    </li>
+    <li class="nav-item" [ngClass]="{ 'active' : basicElements.isActive }">
+      <a class="nav-link" (click)="expensesCollapsed = !expensesCollapsed" [attr.aria-expanded]="expensesCollapsed" aria-controls="form-elements">
+        <span class="menu-title" translate>Expenses</span>
+        <i class="icon-book-open menu-icon"></i>
+      </a>
+      <div class="collapse" id="form-elements" [ngbCollapse]="!expensesCollapsed">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"><a class="nav-link" routerLink="expense" routerLinkActive="active" #basicElements="routerLinkActive" translate>Daily Expenses</a></li>
+          <li class="nav-item"><a class="nav-link" routerLink="expensehistory" routerLinkActive="active" #basicElements="routerLinkActive" translate>General Expenses</a></li>
+        </ul>
+      </div>
+    </li>
+    <li class="nav-item" [ngClass]="{ 'active' : chartjs.isActive }">
+      <a class="nav-link" (click)="reportsCollapsed = !reportsCollapsed" [attr.aria-expanded]="reportsCollapsed" aria-controls="charts">
+        <span class="menu-title" translate>Reports</span>
+        <i class="icon-chart menu-icon"></i>
+      </a>
+      <div class="collapse" id="charts" [ngbCollapse]="!reportsCollapsed">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item"> <a class="nav-link" routerLink="charts/chartjs" routerLinkActive="active" #chartjs="routerLinkActive">Income Reports</a></li>
+          <li class="nav-item"> <a class="nav-link" routerLink="charts/chartjs" routerLinkActive="active" #chartjs="routerLinkActive">Expense Reports</a></li>
+        </ul>
+      </div>
+    </li>
+
+  </ul>
+</nav>

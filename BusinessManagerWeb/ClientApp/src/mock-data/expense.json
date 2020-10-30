@@ -1,0 +1,13 @@
+[
+  {
+    "Amount":1200,
+    "Description":"Fuel Purchase",
+    "ExpenseDate": "26-Oct-2020"
+  },
+
+  {
+    "Amount":300,
+    "Description":"Plug Purchase",
+    "ExpenseDate": "26-Oct-2020"
+  }
+]

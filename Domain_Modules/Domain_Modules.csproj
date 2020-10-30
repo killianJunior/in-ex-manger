@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="app.domain.seedwork">
+      <HintPath>..\..\..\..\Documents\Seedwork\app.domain.seedwork.dll</HintPath>
+    </Reference>
+    <Reference Include="Application.SeedWork">
+      <HintPath>..\..\..\..\Documents\Old_Seedwork\Application.SeedWork.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

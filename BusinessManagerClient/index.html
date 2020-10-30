@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" data-ng-app="BusinessManagerApp">
+
+<!--Rquired Meta Tags -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Killian Thompson Redefined!!!">
+    <meta name="generator" content="Jekyll v4.1.1">
+
+
+    <title>Game Business Manager</title>
+
+
+
+    <!--Core Scripts-->
+    <!--<script src="public/scripts/jquery-3.5.1.slim.min.js"></script>-->
+    <script src="public/scripts/jquery.min.js"></script>
+    <script src="public/scripts/bootstrap.bundle.min.js"></script>
+
+    <!-- Bootstrap core CSS -->
+    <!--<link href="public/css/bootstrap.min.css" rel="stylesheet" />-->
+
+
+    <style>
+    </style>
+
+
+    <!-- Custom styles for this template -->
+    <!--<link href="public/css/dashboard.css" rel="stylesheet" />-->
+    <link href="public/css/main.css" rel="stylesheet" />
+
+</head>
+
+<body ng-controller="MainCtrl">
+
+    <!-- Top Navigation -->
+    <div data-ng-include="'public/views/core/header.html'"></div>
+
+    <!-- Side Bar Navigation -->
+    <!--<div class="container-fluid">
+        <div class="row" data-ng-include="'public/views/core/side_bar_nav.html'"></div>
+    </div>-->
+    <!--SPA Page/ Angualr Module-->
+
+    <div  ui-view class="content" role="main">
+
+        <!-- ui-view brings in my partial views -->
+        <!-- angular module sends here -->
+    </div>
+
+    <div data-ng-include="'public/views/core/footer.html'"></div>
+
+
+
+    <!-- <script src="jquery-3.5.1.slim.min.js"></script>-->
+    <!-- <script>window.jQuery || document.write('<script src="jquery-3.5.1.slim.min.js"><\/script>')</script> -->
+    <!--<script src="bootstrap-4.5.2-dist/js/bootstrap.bundle.min.js"></script>-->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script> -->
+    <!-- <script src="dashboard.js"></script> -->
+    <!-- Libraries-->
+    <!---->
+    <script src="public/assets/libraries/angular/angular.min.js"></script>
+    <script src="public/assets/libraries/angular-resource/angular-resource.min.js"></script>
+    <script src="public/assets/libraries/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="public/assets/libraries/angular-ui-utils/ui-utils.min.js"></script>
+    <script src="public/assets/libraries/angular-ui-select/dist/select.min.js"></script>
+    <script src="public/assets/libraries/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <!--Custom Controls-->
+
+    <script src="public/app.js"></script>
+    <script src="public/modules/core.config.js"></script>
+    <script src="public/modules/ctrl.main.js"></script>
+    <script src="public/modules/ctrl.dashboard.js"></script>
+
+
+    <script src="public/modules/resources/rsc.application.js"></script>
+
+    <script src="public/modules/config/config.application.js"></script>
+
+
+    <script src="public/modules/controllers/ctrl.daily_income.js"></script>
+    <script src="public/modules/controllers/ctrl.expense.js"></script>
+</body>
+
+</html>

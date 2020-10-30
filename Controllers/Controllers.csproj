@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard4.6.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BL\BL.csproj" />
+    <ProjectReference Include="..\Domain_Modules\Domain_Modules.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Application.SeedWork">
+      <HintPath>..\..\..\..\Documents\Old_Seedwork\Application.SeedWork.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

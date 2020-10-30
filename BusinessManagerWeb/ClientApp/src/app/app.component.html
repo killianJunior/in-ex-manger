@@ -1,0 +1,20 @@
+
+<div class="container-scroller">
+
+  <app-nav-menu></app-nav-menu>
+
+  <div class="container-fluid page-body-wrapper">
+
+    <app-sidebar></app-sidebar>
+    <div class="main-panel">
+        <div class="content-wrapper">
+          <app-spinner *ngIf="isLoading"></app-spinner>
+            <div contentAnimate *ngIf="!isLoading" class="h-100">
+              <router-outlet></router-outlet>
+            </div>
+
+        </div>
+    </div>
+  </div>
+
+</div>

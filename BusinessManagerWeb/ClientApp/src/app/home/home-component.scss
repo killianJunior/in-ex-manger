@@ -1,0 +1,144 @@
+.quick-action-toolbar {
+  .card {
+      .card-header {
+          color: #fcfcfc;
+          padding: 12px 30px;
+          background-image: linear-gradient(to left, #f5da7a, #f76b1c);
+          border: 0;
+          border-radius: 0;
+          h5 {
+              font-weight: 600;
+              font-size: 18px;
+          }
+
+          p {
+              color: inherit;
+          }
+          i {
+              margin-left: 15px;
+              align-self: center;
+          }
+      }
+
+      .quick-action-btns {
+          .btn-light {
+              background-color: transparent;
+              border: none;
+              font-size: 14px;
+              color: #746f6f;
+              font-weight: 600;
+              display: flex;
+              align-items: center;
+
+              i {
+                  color: #626262;
+                  margin-right: 15px;
+                  font-size: 18px;
+                  .rtl & {
+                      margin-left: 15px;
+                      margin-right: 0;
+                  }
+              }
+          }
+          .btn-wrapper{
+              border-right: 1px solid #746f6f;
+              display: flex;
+              justify-content: center;
+
+              .rtl & {
+                  border-right: none;
+                  border-left: 1px solid #746f6f;
+              }
+
+              button {
+                  display: flex;
+                  align-items: center;
+              }
+
+              &:first-child {
+                  @media screen and (max-width:767px )  {
+                      border-bottom: 1px solid #746f6f;
+                  }
+                  @media screen and (max-width:576px )  {
+                      border-right: none;
+                  }
+              }
+
+              &:nth-child(2) {
+                  @media screen and (max-width:767px )  {
+                      border-right: none;
+                      border-bottom: 1px solid #746f6f;
+                  }
+              }
+
+              &:nth-child(3) {
+                  @media screen and (max-width:576px )  {
+                      border-right: none;
+                      border-bottom: 1px solid #746f6f;
+                  }
+              }
+
+              &:last-child {
+                  border: none;
+              }
+          }
+      }
+  }
+}
+
+
+.income-expense-summary-chart-text {
+  h5 {
+      font-size: 18px;
+      font-weight: 600;
+  }
+  h3 {
+      font-size: 24px;
+      font-weight: bold;
+  }
+}
+
+.income-expense-summary-chart-legend {
+  display: flex;
+  align-items: center;
+
+  span {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid transparent;
+      margin-right: 10px;
+
+      .rtl & {
+          margin-left: 10px;
+          margin-right: 0;
+      }
+  }
+}
+
+.quick-status-card {
+  .icon-holder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 45px;
+      height: 45px;
+      border-radius: 4px;
+      background-color: #ecf0f4;
+      font-size: 20px;
+      color: #626262;
+
+      @media screen and (max-width: 360px) {
+          display: none;
+      }
+  }
+
+  .wrapper {
+      &:first-child {
+          .icon-holder {
+              background-color: #3a69ff;
+              color: #fcfcfc;
+          }
+      }
+  }
+}

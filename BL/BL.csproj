@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.0.0" />
+    <PackageReference Include="MediatR" Version="8.1.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Engine\Engine.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="app.domain.seedwork">
+      <HintPath>..\..\..\..\Documents\Seedwork\app.domain.seedwork.dll</HintPath>
+    </Reference>
+    <Reference Include="Application.SeedWork">
+      <HintPath>..\..\..\..\Documents\Old_Seedwork\Application.SeedWork.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

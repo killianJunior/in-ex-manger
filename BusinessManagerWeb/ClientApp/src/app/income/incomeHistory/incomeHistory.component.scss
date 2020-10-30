@@ -1,0 +1,40 @@
+.btn-rounded {
+  border-radius: 50px;
+}
+
+.btn-fw {
+  min-width: button-fixed-width;
+}
+
+.income-expense-summary-chart-text {
+  h5 {
+      font-size: 18px;
+      font-weight: 600;
+  }
+  h3 {
+      font-size: 24px;
+      font-weight: bold;
+  }
+}
+
+.income-expense-summary-chart-legend {
+  display: flex;
+  align-items: center;
+
+  span {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid transparent;
+      margin-right: 10px;
+
+      .rtl & {
+          margin-left: 10px;
+          margin-right: 0;
+      }
+  }
+}
+
+
+/* inverse buttons */
+

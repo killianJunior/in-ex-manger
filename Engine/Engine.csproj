@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain_Modules\Domain_Modules.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="app-efcore-infrastructure-seedwork">
+      <HintPath>..\..\..\..\Documents\Seedwork\app-efcore-infrastructure-seedwork.dll</HintPath>
+    </Reference>
+    <Reference Include="app.domain.seedwork">
+      <HintPath>..\..\..\..\Documents\Seedwork\app.domain.seedwork.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

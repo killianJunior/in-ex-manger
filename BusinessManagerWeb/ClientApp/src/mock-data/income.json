@@ -1,0 +1,36 @@
+[
+  {
+    "amountMade":4000,
+    "entryDate": "21-Oct-2020",
+    "expenses":1200,
+    "dailyAllowance":500,
+    "profit": 2300,
+    "percentageProfit": 230,
+    "savings":1000,
+    "balance": 1070
+
+
+  },
+
+  {
+    "amountMade":3500,
+    "entryDate": "22-Oct-2020",
+    "expenses":1200,
+    "dailyAllowance":500,
+    "profit": 1800,
+    "percentageProfit": 180,
+    "savings":1000,
+    "balance": 620
+  },
+
+  {
+    "amountMade":3500,
+    "entryDate": "23-Oct-2020",
+    "expenses":1500,
+    "dailyAllowance":500,
+    "profit": 1500,
+    "percentageProfit": 150,
+    "savings":1000,
+    "balance": 350
+  }
+]
