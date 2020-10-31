@@ -6,7 +6,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
 
-import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
+/*import { InMemoryWebApiModule } from 'angular-in-memory-web-api';*/
 
 
 import {TranslateModule} from '@ngx-translate/core';
@@ -28,7 +28,7 @@ import { ExpenseComponent } from './expenses/expense/expense.component';
 import { ExpenseHistoryComponent } from './expenses/expenseHistory/expenseHistory.component';
 import { ExpenseService } from './services/expense.service';
 import { IncomeService } from './services/income.service';
-import { IncomeData } from 'src/mock-data/income-data';
+/*import { IncomeData } from 'src/mock-data/income-data';*/
 import {  CustomAdapter, CustomDateParserFormatter } from './services/datepicker-adapter.service';
 import { IncomeDetailComponent } from './income/incomeDetail/incomeDetail.component';
 
@@ -70,7 +70,7 @@ import { IncomeDetailComponent } from './income/incomeDetail/incomeDetail.compon
       { path: 'income-detail/:id', component: IncomeDetailComponent }
 
     ]),
-    InMemoryWebApiModule.forRoot(IncomeData),
+   /* InMemoryWebApiModule.forRoot(IncomeData),*/
     TranslateModule.forRoot(),
     NgbModule,
     BsDatepickerModule.forRoot(),

@@ -1,5 +1,6 @@
 using BL.executors;
 using BL.logic;
+using BusinessManagerWeb.Data;
 using Domain_Modules.objects;
 using Engine;
 using Engine.contracts;
@@ -30,12 +31,22 @@ namespace BusinessManagerWeb
         {
 
 
-            services.AddScoped<IDailyIncomeRepository, DailyIncomeRepository>();
+          
 
+
+            services.AddDbContext<ApplicationBbContext>(options => options.UseSqlServer(
+                Configuration.GetConnectionString("AppConnection")));
+
+            services.AddScoped<UnitOfWork, ApplicationBbContext>();
+
+            DependencyInjection.ConfigureServices(services);
+
+            
             services.AddScoped<IDailyIncomeLogic, DailyIncomeExecutor>();
+            services.AddScoped<IExpenseLogic, ExpenseExecutor>();
 
 
-            services.AddDbContext<BmDbContext>();
+
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
 

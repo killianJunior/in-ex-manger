@@ -11,9 +11,7 @@ namespace Engine.dbConfiguration
 {
     public abstract class UnitOfWork : IDbContextUnitofWork
     {
-        /* IDailyIncomeRepository DailyIncome { get; }
-         IExpenseRepository Expense { get; }*/
-
+       
         public UnitOfWork()
         {
 

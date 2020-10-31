@@ -320,10 +320,6 @@
       <Project>{397c3c36-f12c-4136-9abf-e8a48872a5c6}</Project>
       <Name>BL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Controllers\Controllers.csproj">
-      <Project>{bf3070e2-6530-481d-8ea7-fbaa979eba99}</Project>
-      <Name>Controllers</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

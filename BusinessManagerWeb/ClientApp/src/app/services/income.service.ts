@@ -9,8 +9,8 @@ import { Income } from '../data-model/income';
 })
 export class IncomeService {
 
-   //private baseUrl = 'api/inData';
-   private baseUrl = 'api/dailyIncomes'
+   private baseUrl = 'api/inData';
+  //  private baseUrl = 'api/dailyIncomes'
 
   constructor(private http: HttpClient) { }
 

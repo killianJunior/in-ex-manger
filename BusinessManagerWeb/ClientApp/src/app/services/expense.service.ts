@@ -11,6 +11,7 @@ import { Expense } from '../data-model/expense';
 export class ExpenseService {
 
   private baseExUrl = 'api/exData';
+  // private baseExUrl = 'api/expenses'
 
   constructor(private http: HttpClient) { }
 

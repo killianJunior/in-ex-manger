@@ -23,6 +23,7 @@ namespace BusinessManagerWeb.Controllers
 
         // GET: api/Expenses
         [HttpGet]
+        [Route("expenses")]
         public async Task<ActionResult<IEnumerable<Expense>>> GetExpense()
         {
             return await _context.Expense.ToListAsync();

@@ -1,4 +1,4 @@
-﻿using Application.SeedWork;
+﻿using app_businesslogic_seedwork;
 using System;
 using System.Collections.Generic;
 using System.Text;

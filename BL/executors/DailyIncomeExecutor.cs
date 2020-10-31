@@ -1,4 +1,5 @@
 ﻿using app.domain.seedwork;
+using app_businesslogic_seedwork;
 using AutoMapper;
 using BL.logic;
 using Domain_Modules.dt_Objects;
@@ -130,7 +131,7 @@ namespace BL.executors
 
                     if (obj.Id == Guid.Empty)
                     {
-                        obj.ModifiedDate = DateTime.Now;
+                       /* obj.ModifiedDate = DateTime.Now;*/
 
                         var dataObj = new MapperConfiguration(doj =>
                         {

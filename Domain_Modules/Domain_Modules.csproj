@@ -5,11 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Reference Include="app-businesslogic-seedwork">
+      <HintPath>..\..\..\..\Documents\Seedwork\app-businesslogic-seedwork.dll</HintPath>
+    </Reference>
     <Reference Include="app.domain.seedwork">
       <HintPath>..\..\..\..\Documents\Seedwork\app.domain.seedwork.dll</HintPath>
-    </Reference>
-    <Reference Include="Application.SeedWork">
-      <HintPath>..\..\..\..\Documents\Old_Seedwork\Application.SeedWork.dll</HintPath>
     </Reference>
   </ItemGroup>
 
