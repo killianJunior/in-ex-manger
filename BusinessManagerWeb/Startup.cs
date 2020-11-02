@@ -30,10 +30,6 @@ namespace BusinessManagerWeb
         public void ConfigureServices(IServiceCollection services)
         {
 
-
-          
-
-
             services.AddDbContext<ApplicationBbContext>(options => options.UseSqlServer(
                 Configuration.GetConnectionString("AppConnection")));
 
@@ -86,6 +82,7 @@ namespace BusinessManagerWeb
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+                
             });
 
             app.UseSpa(spa =>

@@ -28,6 +28,7 @@
     "@ng-bootstrap/ng-bootstrap": "^7.0.0",
     "@nguniversal/module-map-ngfactory-loader": "^8.2.6",
     "@ngx-translate/core": "^13.0.0",
+    "angular-bootstrap-md": "^10.0.0",
     "angular-in-memory-web-api": "^0.11.0",
     "aspnet-prerendering": "^3.0.1",
     "bootstrap": "^4.5.2",

@@ -1,14 +1,15 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, PipeTransform, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControl, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { fromEvent, merge, Observable, Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { BehaviorSubject, fromEvent, merge, Observable, of, Subject, Subscription } from 'rxjs';
+import { debounceTime, delay, map, startWith, switchMap, tap } from 'rxjs/operators';
 import { Expense } from 'src/app/data-model/expense';
 import { GenericValidator } from 'src/app/directives/generic--validator';
 import { ExpenseService } from 'src/app/services/expense.service';
 import { ToastrService } from 'ngx-toastr';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { NgbCalendar, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
+
 
 @Component({
   selector: 'app-expense',
@@ -19,8 +20,22 @@ export class ExpenseComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
 
+
   pageTitle = 'Expense'
   errorMessage: string;
+
+  _listFilter = '';
+  __dataFilter = null;
+
+  get listFilter(): string {
+    return this._listFilter;
+  }
+
+  set listFilter(value: string){
+    this._listFilter = value;
+    this.filteredData = this.listFilter ? this.search(this.listFilter) : this.allExpenses;
+  }
+
 
   newExpenseForm: FormGroup;
   expense = new Expense();
@@ -29,17 +44,23 @@ export class ExpenseComponent implements OnInit, AfterViewInit, OnDestroy {
   queryDate = new Date().toLocaleDateString();
   expensesTotal: number = 0;
 
+  filteredData: Expense[];
+
 
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
   private genericValidator: GenericValidator;
 
-  constructor(private fb: FormBuilder,
-              private router: Router,
-              private expenseService: ExpenseService,
-              private notify: ToastrService,
-              private ngbCalendar: NgbCalendar,
-              private dateAdapter: NgbDateAdapter<string>, private datePipe: DatePipe) {
+
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private expenseService: ExpenseService,
+    private notify: ToastrService,
+    private ngbCalendar: NgbCalendar,
+    private dateAdapter: NgbDateAdapter<string>,
+    private datePipe: DatePipe,
+              ) {
 
   this.validationMessages = {
     amount: {
@@ -56,14 +77,23 @@ export class ExpenseComponent implements OnInit, AfterViewInit, OnDestroy {
   this.genericValidator = new GenericValidator(this.validationMessages);
   this.queryDate = this.datePipe.transform(this.queryDate, 'dd-MM-yyy');
 
+
   }
+
+  search(filterBy: string): Expense[] {
+   filterBy = filterBy.toLocaleLowerCase();
+   return this.allExpenses.filter((expense: Expense) =>
+    expense.description.toLocaleLowerCase().indexOf(filterBy) !== -1);
+  }
+
 
   ngOnInit() {
     this.createNewExpenseForm();
     this.expenseService.getExpenses().subscribe({
       next: expenses => {
         if (expenses != null) {
-          this.allExpenses = expenses
+          this.allExpenses = expenses;
+          this.filteredData = expenses;
         }
       },
       error: err => this.errorMessage = err
@@ -80,6 +110,7 @@ export class ExpenseComponent implements OnInit, AfterViewInit, OnDestroy {
     ).subscribe(value => {
       this.displayMessage = this.genericValidator.processMessages(this.newExpenseForm);
     });
+
   }
 
   ngOnDestroy(): void {
@@ -139,6 +170,7 @@ export class ExpenseComponent implements OnInit, AfterViewInit, OnDestroy {
     this.expense.expenseDate = this.expenseDate.value;
   }
 
+
   GetTodaysExpenses(){
     console.log(this.queryDate);
     this.expenseService.getExpensesByDate(this.queryDate).subscribe(
@@ -152,10 +184,8 @@ export class ExpenseComponent implements OnInit, AfterViewInit, OnDestroy {
         console.log('httperror:');
         console.log(error);
       })
-}
+  }
 
 }
 
-// let sum: number = 0;
-// itemArray.forEach(a => sum += a.value);
-// console.log(sum );
+

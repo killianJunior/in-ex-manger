@@ -14,11 +14,6 @@ namespace Engine
         {
 
         }
-       /* public CommunityRepository(DbContext context)
-            : base(context)
-        {
-
-        }*/
-
+      
     }
 }

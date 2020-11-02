@@ -7,49 +7,83 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Domain_Modules.objects;
 using Engine.dbConfiguration;
+using BL.logic;
+using Domain_Modules.dt_Objects;
 
 namespace BusinessManagerWeb.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("[controller]")]
     public class ExpensesController : ControllerBase
     {
-        private readonly BmDbContext _context;
+       /* private readonly BmDbContext _context;*/
+        IExpenseLogic _service;
 
-        public ExpensesController(BmDbContext context)
+        public ExpensesController(IExpenseLogic service)
         {
-            _context = context;
+            _service = service;
         }
 
         // GET: api/Expenses
         [HttpGet]
         [Route("expenses")]
-        public async Task<ActionResult<IEnumerable<Expense>>> GetExpense()
+        public ActionResult<IEnumerable<Expense>> Get()
+        {
+            var expenses = _service.GetAllExpenseSheet().Result;
+
+            if (expenses != null)
+            {
+                return Ok(expenses);
+            }
+
+            return NotFound();
+
+        }
+      /*  public async Task<ActionResult<IEnumerable<Expense>>> GetExpense()
         {
             return await _context.Expense.ToListAsync();
-        }
+        }*/
 
         // GET: api/Expenses/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Expense>> GetExpense(Guid id)
+        public ActionResult<Expense> Get(Guid id)
         {
-            var expense = await _context.Expense.FindAsync(id);
+            var expense = _service.GetExpense(id).Result;
 
             if (expense == null)
             {
                 return NotFound();
             }
 
-            return expense;
+            return Ok(expense);
         }
 
         // PUT: api/Expenses/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutExpense(Guid id, Expense expense)
+        public async Task<IActionResult> Put(ExpenseObject obj)
         {
-            if (id != expense.Id)
+
+            try
+            {
+                if (obj.Id != Guid.Empty)
+                {
+                    if (await _service.ChangeExpense(obj))
+                    {
+                        return Ok();
+                    }
+                    return BadRequest();
+                }
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+           /* if (id != expense.Id)
             {
                 return BadRequest();
             }
@@ -72,40 +106,73 @@ namespace BusinessManagerWeb.Controllers
                 }
             }
 
-            return NoContent();
+            return NoContent();*/
         }
 
         // POST: api/Expenses
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Expense>> PostExpense(Expense expense)
+        public async Task<ActionResult<Expense>> Post(ExpenseObject Obj)
         {
-            _context.Expense.Add(expense);
-            await _context.SaveChangesAsync();
+            try
+            {
+                if (Obj.Id == Guid.Empty)
+                {
+                    Obj.Id = await _service.CreateExpense(Obj);
+                    if (Obj.Id != Guid.Empty)
+                    {
+                        return Ok(Obj.Id);
+                    }
+                    return BadRequest();
+                }
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
 
-            return CreatedAtAction("GetExpense", new { id = expense.Id }, expense);
+                throw ex;
+            }
         }
 
         // DELETE: api/Expenses/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Expense>> DeleteExpense(Guid id)
+        public async Task<ActionResult<Expense>> Delete(Guid id)
         {
-            var expense = await _context.Expense.FindAsync(id);
-            if (expense == null)
+            try
             {
-                return NotFound();
+                if (id != Guid.Empty)
+                {
+                    if (await _service.RemoveExpense(id))
+                    {
+                        return Ok();
+                    }
+                    return BadRequest();
+                }
+                return BadRequest();
             }
+            catch (Exception)
+            {
 
-            _context.Expense.Remove(expense);
-            await _context.SaveChangesAsync();
-
-            return expense;
+                throw;
+            }
         }
 
-        private bool ExpenseExists(Guid id)
+       /* private bool ExpenseExists(Expense)
         {
-            return _context.Expense.Any(e => e.Id == id);
-        }
+            try
+            {
+                if (id == )
+                {
+
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return _service.Expense.Any(e => e.Id == id);
+        }*/
     }
 }

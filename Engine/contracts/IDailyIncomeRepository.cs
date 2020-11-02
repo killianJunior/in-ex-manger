@@ -10,8 +10,4 @@ namespace Engine.contracts
     {
     }
 
-    /*public interface IExpenseRepository : IRepository<Expense>
-    {
-
-    }*/
 }

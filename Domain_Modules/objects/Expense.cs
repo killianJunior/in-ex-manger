@@ -10,6 +10,7 @@ namespace Domain_Modules.objects
             public int Amount { get; set; }
             public string Details { get; set; }
             public DateTime Date { get; set; }
+            
 
             /*This instantiates a relationship with Daily Income*/
         /*    public Guid DailyIncomeId { get; set; }

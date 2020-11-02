@@ -98,29 +98,39 @@
          </div>
        </div>
        <hr/>
-        <div class="table-responsive">
-          <table class="table table-hover table-bordered">
-            <thead>
-              <tr>
-                <th class="font-weight-bold">Description</th>
-                <th class="font-weight-bold">Date</th>
-                <th class="font-weight-bold">Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let ex of allExpenses">
-                <td><label >{{ex.description}}</label></td>
-                <td><label >{{ex.expenseDate}}</label></td>
-                <td><label class="badge badge-secondary p-2">{{ex.amount}}</label></td>
-              </tr>
-              <tr>
-                <td class="font-weight-bold">Total</td>
-                <td><label class="badge badge-success p-2">{{expensesTotal}}</label></td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
+
+       <!-- <form> -->
+        <div class="form-group form-inline">
+          <input class="form-control ml-2" type="text" [(ngModel)]="listFilter"/>
         </div>
+       <div class="table-responsive">
+         <table class="table table-hover table-bordered">
+           <thead>
+             <tr>
+               <th>#</th>
+               <th class="font-weight-bold">Description</th>
+               <th class="font-weight-bold">Date</th>
+               <th class="font-weight-bold">Amount</th>
+             </tr>
+           </thead>
+           <tbody>
+             <tr *ngFor="let ex of filteredData">
+               <th scope="row"></th>
+               <td> <label>{{ex.description}}</label> </td>
+               <td><label >{{ex.expenseDate}}</label></td>
+               <td><label class="badge badge-secondary p-2">{{ex.amount}}</label> </td>
+             </tr>
+             <tr>
+               <td class="font-weight-bold">Total</td>
+               <td><label class="badge badge-success p-2">{{expensesTotal}}</label></td>
+               <td></td>
+             </tr>
+           </tbody>
+         </table>
+
+        </div>
+     <!-- </form> -->
+
       </div>
     </div>
   </div>

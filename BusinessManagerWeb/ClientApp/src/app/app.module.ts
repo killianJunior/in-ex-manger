@@ -4,9 +4,9 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 
-/*import { InMemoryWebApiModule } from 'angular-in-memory-web-api';*/
+import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 
 
 import {TranslateModule} from '@ngx-translate/core';
@@ -28,9 +28,11 @@ import { ExpenseComponent } from './expenses/expense/expense.component';
 import { ExpenseHistoryComponent } from './expenses/expenseHistory/expenseHistory.component';
 import { ExpenseService } from './services/expense.service';
 import { IncomeService } from './services/income.service';
-/*import { IncomeData } from 'src/mock-data/income-data';*/
+import { IncomeData } from 'src/mock-data/income-data';
 import {  CustomAdapter, CustomDateParserFormatter } from './services/datepicker-adapter.service';
 import { IncomeDetailComponent } from './income/incomeDetail/incomeDetail.component';
+import { SortableDirective } from './services/sortable.directive';
+// import { ExpenseFilterService } from './services/expense-filter.service';
 
 
 @NgModule({
@@ -46,8 +48,9 @@ import { IncomeDetailComponent } from './income/incomeDetail/incomeDetail.compon
     IncomeHistoryComponent,
     ExpenseComponent,
     ExpenseHistoryComponent,
-    IncomeDetailComponent
-    
+    IncomeDetailComponent,
+
+
    ],
 
   imports: [
@@ -70,7 +73,7 @@ import { IncomeDetailComponent } from './income/incomeDetail/incomeDetail.compon
       { path: 'income-detail/:id', component: IncomeDetailComponent }
 
     ]),
-   /* InMemoryWebApiModule.forRoot(IncomeData),*/
+    InMemoryWebApiModule.forRoot(IncomeData),
     TranslateModule.forRoot(),
     NgbModule,
     BsDatepickerModule.forRoot(),
@@ -88,7 +91,9 @@ import { IncomeDetailComponent } from './income/incomeDetail/incomeDetail.compon
     IncomeService,
     DatePipe,
     {provide: NgbDateAdapter, useClass: CustomAdapter},
-    {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter}
+    {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter},
+    DecimalPipe,
+    SortableDirective
     /*{ provide: 'BASE_URL', useFactory: getBaseUrl }*/
 
   ],
