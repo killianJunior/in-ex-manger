@@ -9,5 +9,6 @@ namespace Engine.dbConfiguration
     {
         IDailyIncomeRepository DailyIncome { get; }
         IExpenseRepository Expense { get; }
+        IGenExpenseRepository GenExpense { get; }
     }
 }

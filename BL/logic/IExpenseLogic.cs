@@ -8,10 +8,10 @@ namespace BL.logic
 {
     public interface IExpenseLogic
     {
-        Task<ExpenseObject> GetExpense(Guid ExpenseId);
-        Task<IList<ExpenseObject>> GetAllExpenseSheet();
+        ExpenseObject GetExpense(Guid ExpenseId);
+        IList<ExpenseObject> GetAllExpenseSheet();
         Task<Guid> CreateExpense(ExpenseObject obj);
-        Task<bool> ChangeExpense(ExpenseObject obj);
-        Task<bool> RemoveExpense(Guid ExpenseId);
+        Task<bool> UpdateExpense(ExpenseObject obj);
+        Task<bool> RemoveExpense(ExpenseObject obj);
     }
 }

@@ -5,6 +5,7 @@
 </div>
 
 <div class="row">
+
   <div class="col-lg-6 grid-margin stretch-card">
     <div class="card">
       <div class="card-body">
@@ -14,33 +15,45 @@
         </p> -->
         <hr/>
         <div class="forms-sample">
-          <form novalidate [formGroup]="newExpenseForm" (ngSubmit)="saveExpense()">
+          <form [formGroup]="newExpenseForm" (ngSubmit)="saveExpense()">
 
             <!-- <div class="form-inline"> -->
-              <div class="form-group">
-                <label for="expenseDateId">Select Date</label>
-                <div class="form-inline">
-                    <input type="text" class="form-control" placeholder="DD/MM/YYYY"
-                    formControlName="expenseDate" ngbDatepicker #d2="ngbDatepicker">
-                    <div class="input-group-append">
-                      <button class="btn btn-outline-secondary mdi mdi-calendar" (click)="d2.toggle()" type="button"></button>
-                    </div>
-                    <hr/>
-                    <!-- <button class="btn btn-sm btn-outline-primary" (click)="model2 = today">Select Today</button> -->
-                    <hr/>
-                </div>
-                <span class="invalid-feedback">
-                  {{displayMessage.expenseDate}}
-                </span>
-              </div>
+            <!--<div class="form-group">
+                  <label for="expenseDateId">Select Date</label>
+                  <div class="form-inline">
+                      <input type="text" class="form-control" placeholder="DDD/MM/YYYY"
+                      formControlName="expenseDate" ngbDatepicker #d2="ngbDatepicker">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-secondary mdi mdi-calendar" (click)="d2.toggle()" type="button"></button>
+                      </div>
+                      <hr/>
+                      <hr/>
+                  </div>
+                  <span class="invalid-feedback">
+                    {{displayMessage.expenseDate}}
+                  </span>
+                </div>-->
             <!-- </div> -->
+
+            <div class="form-group">
+              <label for="expenseDateId">Date</label>
+              <input type="text" class="form-control"
+                     placeholder="Date (required)"
+                     formControlName="expenseDate" bsDatepicker
+                     [bsConfig]="{containerClass: 'theme-default',
+              dateInputFormat: 'DD-MM-YYYY'}"
+                     [ngClass]="{'is-invalid': displayMessage.expenseDate }">
+              <span class="invalid-feedback">
+                {{displayMessage.expenseDate}}
+              </span>
+            </div>
 
 
             <div class="form-group">
               <label for="amountId">Amount</label>
               <input type="number" class="form-control"
-              id="amountId" placeholder="Amount (required)"
-              formControlName="amount" [ngClass]="{'is-invalid': displayMessage.amount }">
+                     id="amountId" placeholder="Amount (required)"
+                     formControlName="amount" [ngClass]="{'is-invalid': displayMessage.amount }">
               <span class="invalid-feedback">
                 {{displayMessage.amount}}
               </span>
@@ -49,8 +62,8 @@
             <div class="form-group">
               <label for="descriptionId">Description</label>
               <textarea type="text" class="form-control"
-              id="descriptionId" placeholder="Description (required)"
-              formControlName="description" [ngClass]="{'is-invalid': displayMessage.description }">
+                        id="descriptionId" placeholder="Description (required)"
+                        formControlName="description" [ngClass]="{'is-invalid': displayMessage.description }">
             </textarea>
               <span class="invalid-feedback">
                 {{displayMessage.description}}
@@ -58,19 +71,22 @@
             </div>
 
             <button type="submit" class="btn btn-primary btn-rounded btn-fw mr-2"
-            [title]="newExpenseForm.valid ? 'Save Entry': 'Disabled until form data is valid'"
-            [disabled]="!newExpenseForm.valid">
+                    [title]="newExpenseForm.valid ? 'Save Entry': 'Disabled until form data is valid'"
+                    [disabled]="!newExpenseForm.valid">
               Submit
-          </button>
+            </button>
             <button class="btn btn-light btn-rounded btn-fw"
-            title="Cancel Entry"
-            (click)="cancelEntry()">Cancel</button>
+                    title="Cancel Entry"
+                    (click)="cancelEntry()">
+              Cancel
+            </button>
           </form>
         </div>
 
       </div>
     </div>
   </div>
+
   <div class="col-lg-6 grid-margin stretch-card">
     <div class="card">
       <div class="card-body">
@@ -103,11 +119,12 @@
         <div class="form-group form-inline">
           <input class="form-control ml-2" type="text" [(ngModel)]="listFilter"/>
         </div>
+
        <div class="table-responsive">
          <table class="table table-hover table-bordered">
            <thead>
              <tr>
-               <th>#</th>
+               <th><span class="mr-4 text-warning">Edit</span> <span class="text-danger">Delete</span></th>
                <th class="font-weight-bold">Description</th>
                <th class="font-weight-bold">Date</th>
                <th class="font-weight-bold">Amount</th>
@@ -115,15 +132,26 @@
            </thead>
            <tbody>
              <tr *ngFor="let ex of filteredData">
-               <th scope="row"></th>
-               <td> <label>{{ex.description}}</label> </td>
-               <td><label >{{ex.expenseDate}}</label></td>
-               <td><label class="badge badge-secondary p-2">{{ex.amount}}</label> </td>
+               <td>
+                 <a [routerLink]="['/expense', ex.id, 'edit']" class="mr-5 text-warning" title="Edit">
+                   <i class="mdi mdi-pen"></i>
+                 </a>
+                <!-- <a (click)="initiateEditPage(ex.id)" class="mr-5 text-warning" title="Edit">
+                   <i class="mdi mdi-pen"></i>
+                 </a>-->
+                 <a (click)="deleteExpense()" class="text-danger" title="Remove">
+                   <i class="mdi mdi-close"></i>
+                 </a>
+               </td>
+               <td> <label>{{ex.details}}</label> </td>
+               <td><label>{{ex.date | date}}</label></td>
+               <td><label class="badge badge-secondary p-2"><i class="mdi mdi-currency-ngn"></i>{{ex.amount}}</label> </td>
              </tr>
              <tr>
-               <td class="font-weight-bold">Total</td>
-               <td><label class="badge badge-success p-2">{{expensesTotal}}</label></td>
                <td></td>
+               <td></td>
+               <td class="font-weight-bold"> Total</td>
+               <td><label class="badge badge-success p-2"><i class="mdi mdi-currency-ngn"></i>{{expensesTotal}}</label></td>
              </tr>
            </tbody>
          </table>

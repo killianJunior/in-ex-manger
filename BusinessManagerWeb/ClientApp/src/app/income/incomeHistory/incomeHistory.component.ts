@@ -26,6 +26,7 @@ export class IncomeHistoryComponent implements OnInit {
       next: incomeHistory => {
         if (incomeHistory != null) {
           this.incomeHistory = incomeHistory;
+          console.log(this.incomeHistory)
           this.incomeHistory.forEach(a => this.incomeTotal += a.amountMade)
             console.log(this.incomeTotal);
         }
@@ -39,6 +40,10 @@ export class IncomeHistoryComponent implements OnInit {
 
   AddIncomeLink() {
     this.router.navigate(['/dailyincome']);
+  }
+
+  deleteIncome() {
+    this.notify.warning('In-Ex Manager!', 'Unathourised Operation!');
   }
 
 }

@@ -24,11 +24,13 @@ namespace Engine.dbConfiguration
 
         public DbSet<DailyIncome> DailyIncomes { get; set; }
         public DbSet<Expense> Expenses { get; set; }
+        public DbSet<GenExpense> GenExpenses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new DailyIncomeEntityConfig());
             modelBuilder.ApplyConfiguration(new ExpenseEntityConfig());
+            modelBuilder.ApplyConfiguration(new GenExpenseEntityTypeConfig());
 
         }
     }

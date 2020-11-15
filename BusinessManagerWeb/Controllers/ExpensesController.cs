@@ -13,10 +13,9 @@ using Domain_Modules.dt_Objects;
 namespace BusinessManagerWeb.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class ExpensesController : ControllerBase
     {
-       /* private readonly BmDbContext _context;*/
         IExpenseLogic _service;
 
         public ExpensesController(IExpenseLogic service)
@@ -27,9 +26,9 @@ namespace BusinessManagerWeb.Controllers
         // GET: api/Expenses
         [HttpGet]
         [Route("expenses")]
-        public ActionResult<IEnumerable<Expense>> Get()
+        public ActionResult<IEnumerable<Expense>> GetAll()
         {
-            var expenses = _service.GetAllExpenseSheet().Result;
+            var expenses = _service.GetAllExpenseSheet();
 
             if (expenses != null)
             {
@@ -45,10 +44,11 @@ namespace BusinessManagerWeb.Controllers
         }*/
 
         // GET: api/Expenses/5
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("expense/{id}")]
         public ActionResult<Expense> Get(Guid id)
         {
-            var expense = _service.GetExpense(id).Result;
+            var expense = _service.GetExpense(id);
 
             if (expense == null)
             {
@@ -61,7 +61,8 @@ namespace BusinessManagerWeb.Controllers
         // PUT: api/Expenses/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
+        [HttpPut]
+        [Route("updateExpense/{id}")]
         public async Task<IActionResult> Put(ExpenseObject obj)
         {
 
@@ -69,7 +70,7 @@ namespace BusinessManagerWeb.Controllers
             {
                 if (obj.Id != Guid.Empty)
                 {
-                    if (await _service.ChangeExpense(obj))
+                    if (await _service.UpdateExpense(obj))
                     {
                         return Ok();
                     }
@@ -82,37 +83,13 @@ namespace BusinessManagerWeb.Controllers
 
                 throw ex;
             }
-
-           /* if (id != expense.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(expense).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ExpenseExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();*/
         }
 
         // POST: api/Expenses
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
+        [Route("addExpense")]
         public async Task<ActionResult<Expense>> Post(ExpenseObject Obj)
         {
             try
@@ -136,14 +113,15 @@ namespace BusinessManagerWeb.Controllers
         }
 
         // DELETE: api/Expenses/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Expense>> Delete(Guid id)
+        [HttpDelete]
+        [Route("deleteExpense/{id}")]
+        public async Task<ActionResult<Expense>> Delete(ExpenseObject Obj)
         {
             try
             {
-                if (id != Guid.Empty)
+                if (Obj.Id != Guid.Empty)
                 {
-                    if (await _service.RemoveExpense(id))
+                    if (await _service.RemoveExpense(Obj))
                     {
                         return Ok();
                     }
@@ -158,21 +136,5 @@ namespace BusinessManagerWeb.Controllers
             }
         }
 
-       /* private bool ExpenseExists(Expense)
-        {
-            try
-            {
-                if (id == )
-                {
-
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-            return _service.Expense.Any(e => e.Id == id);
-        }*/
     }
 }

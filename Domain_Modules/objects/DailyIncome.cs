@@ -16,9 +16,6 @@ namespace Domain_Modules.objects
         public DateTime EntryDate { get; set; }
 
 
-        /*DailyIncome has a List of expenses*/
-        /* public virtual ICollection<Expense> Expenses { get; set; }*/
-
     }
 
   

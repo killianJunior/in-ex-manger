@@ -18,43 +18,42 @@ namespace BusinessManagerWeb.Controllers
     public class DailyIncomesController : ControllerBase
     {
         private readonly IDailyIncomeLogic _Logic;
-        /*private readonly ILogger<DailyIncomesController> _logger;*/
 
         public DailyIncomesController(IDailyIncomeLogic _logic)
         {
             _Logic = _logic;
-            /* _logger = logger;*/
         }
 
         // GET: api/DailyIncomes
         [HttpGet]
         [Route("dailyIncomes")]
-        public IActionResult GetDailyIncome()
+        public IActionResult GetAll()
         {
             try
             {
-                var incomes = _Logic.GetAllDailyIncomeSheet().Result;
+                var incomes = _Logic.GetAllDailyIncomeSheet();
                 if (incomes != null)
                 {
                     return Ok(incomes);
                 }
                 return NotFound();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                throw ex;
             }
             /*return await _context.DailyIncome.ToListAsync();*/
         }
 
         // GET: api/DailyIncomes/5
-        [HttpGet("{id}")]
-        public IActionResult GetDailyIncome(Guid id)
+        [HttpGet]
+        [Route("dailyIncome/{id}")]
+        public IActionResult Get(Guid id)
         {
             try
             {
-                var dailyIncome = _Logic.GetDailyIncome(id).Result;
+                var dailyIncome = _Logic.GetDailyIncome(id);
                 if (dailyIncome != null)
                 {
                     return Ok(dailyIncome);
@@ -73,14 +72,15 @@ namespace BusinessManagerWeb.Controllers
         // PUT: api/DailyIncomes/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutDailyIncome(DailyIncomeObject obj)
+        [HttpPut]
+        [Route("updateIncome/{id}")]
+        public async Task<IActionResult> Put(DailyIncomeObject obj)
         {
             try
             {
                 if (obj.Id != Guid.Empty)
                 {
-                    if (await _Logic.ChangeDailyIncome(obj))
+                    if (await _Logic.UpdateDailyIncome(obj))
                     {
                         return Ok();
                     }
@@ -100,7 +100,8 @@ namespace BusinessManagerWeb.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<DailyIncome>> PostDailyIncome(DailyIncomeObject obj)
+        [Route("addDailyIncome")]
+        public async Task<ActionResult<DailyIncome>> Post(DailyIncomeObject obj)
         {
             try
             {
@@ -124,14 +125,15 @@ namespace BusinessManagerWeb.Controllers
         }
 
         // DELETE: api/DailyIncomes/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<DailyIncome>> DeleteDailyIncome(Guid id)
+        [HttpDelete]
+        [Route("deleteIncome/{id}")]
+        public async Task<ActionResult<DailyIncome>> Delete(DailyIncomeObject obj)
         {
             try
             {
-                if (id != Guid.Empty)
+                if (obj.Id != Guid.Empty)
                 {
-                    if (await _Logic.RemoveDailyIncome(id))
+                    if (await _Logic.RemoveDailyIncome(obj))
                     {
                         return Ok();
                     }
@@ -146,9 +148,5 @@ namespace BusinessManagerWeb.Controllers
             }
         }
 
-       /* private bool DailyIncomeExists(Guid id)
-        {
-            return _context.DailyIncome.Any(e => e.Id == id);
-        }*/
     }
 }

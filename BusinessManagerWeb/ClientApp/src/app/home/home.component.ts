@@ -45,7 +45,7 @@ export class HomeComponent implements OnInit {
        this.incomeService.getIncomeHistory().subscribe(
          data => {
             this.incomeHistory = data;
-            this.incomeHistory.forEach(i => this.totalIncome += i.amountMade)
+           this.incomeHistory.forEach(i => this.totalIncome += i.amountMade)
             console.log('income bal:', this.totalIncome);
          }
        );

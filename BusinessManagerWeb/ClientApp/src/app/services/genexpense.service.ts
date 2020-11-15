@@ -1,7 +1,8 @@
+import { DecimalPipe } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Injectable, PipeTransform } from '@angular/core';
+import { BehaviorSubject, Observable, of, Subject, throwError } from 'rxjs';
+import { debounceTime, delay, switchMap, tap } from 'rxjs/operators';
 import { Genexpense } from '../data-model/genexpense';
 
 @Injectable({
@@ -9,38 +10,47 @@ import { Genexpense } from '../data-model/genexpense';
 })
 export class GenexpenseService {
 
-  private baseUrl = 'api/genData';
+  private baseUrl = 'api/generalExpense/';
 
-  constructor(private http: HttpClient) { }
+  /*private baseUrl = ' ';*/
+
+  constructor(private http: HttpClient) {
+  }
+
+  #region
 
   getGenExpenses():Observable<Genexpense[]> {
-    return this.http.get<Genexpense[]>(this.baseUrl)
-      .pipe(
-        catchError(this.handleError)
-      )
+    return this.http.get<Genexpense[]>(this.baseUrl + 'genExpenses');
   }
 
   addGenExpense(genEx: Genexpense): Observable<Genexpense> {
     const headers = new HttpHeaders({ 'Context-Type': 'application.json' });
-    genEx.id = null;
-    return this.http.post<Genexpense>(this.baseUrl, genEx, { headers })
-      .pipe(
-        catchError(this.handleError)
-      )
+    return this.http.post<Genexpense>(this.baseUrl + 'addGenExpense', genEx, { headers });
   }
 
-  private handleError(err): Observable<never> {
-
-    let errorMessage: string;
-    if (err.error instanceof ErrorEvent) {
-      errorMessage = `An error occurred: ${err.error.message}`;
-    } else {
-
-      errorMessage = `Backend returned code ${err.status}: ${err.body.error}`;
-    }
-    console.error(err);
-    return throwError(errorMessage);
+  getGenExpenseDetail(id: string): Observable<Genexpense> {
+    return this.http.get<Genexpense>(this.baseUrl + 'genExpense/' + id);
   }
+
+  updateGenEx(genEx: Genexpense): Observable<Genexpense> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.put<Genexpense>(this.baseUrl + 'updateGenExpense/' + genEx.id, genEx, { headers });
+  }
+
+  /*deleteGenEx(genEx: Genexpense): Observable<{}> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.delete<Genexpense>(this.baseUrl + 'deleteGenExpense', genEx.id, genEx, { headers });
+  }*/
+
+  deleteGenExpense(genEx: Genexpense): Observable<{}> {
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+    return this.http.delete<Genexpense>(this.baseUrl + 'deleteGenExpense' + genEx.id,
+      httpOptions);
+  }
+
+  #endregion
 
 
 }
+
+

@@ -1,6 +1,7 @@
 ﻿using app.domain.seedwork;
 using app_businesslogic_seedwork;
 using AutoMapper;
+using BL.helpers;
 using BL.logic;
 using Domain_Modules.dt_Objects;
 using Domain_Modules.objects;
@@ -22,104 +23,48 @@ namespace BL.executors
     /*IRequestHandler<DailyIncomeObject, Guid>*/
     {
 
+        IMapper _Mapper;
         IDailyIncomeRepository dailyIncomeRepo;
 
         public DailyIncomeExecutor(IDailyIncomeRepository _repo) 
         {
+            _Mapper = new Mapper(AppAdapterConfig.GetAppContextConfig());
             dailyIncomeRepo = _repo;
 
         }
 
-        /*public async Task<Guid> Handle(DailyIncomeObject entity, CancellationToken token)
+
+        public DailyIncomeObject GetDailyIncome(Guid IncomeId)
         {
-            if (entity.Id == Guid.Empty)
+            try
             {
-                entity.ModifiedDate = DateTime.Now;
 
-                var dataObj = new MapperConfiguration(doj =>
-                {
-                    doj.CreateMap<DailyIncome, DailyIncomeObject>();
-                });
-
-                IMapper iMapper = dataObj.CreateMapper();
-
-                var source = new DailyIncome();
-
-                source.Id = IdentityGenerator.NewSequentialGuid();
-                source.AmountMade = entity.AmountMade;
-                source.Balance = entity.Balance;
-                source.CompulsorySavings = entity.CompulsorySavings;
-                source.PercentageProfit = entity.PercentageProfit;
-                source.PercentageProfit = entity.Profit;
-
-                dailyIncomeRepo.Add(source);
-                await dailyIncomeRepo.UnitofWork.CommitAsync(token);
-
-                return source.Id;
-
+                return _Mapper.Map<DailyIncome, DailyIncomeObject>(dailyIncomeRepo.GetById(IncomeId));
             }
-            else
+            catch (Exception ex)
             {
-                return entity.Id;
+                throw ex;
             }
-
-            *//*return*//* ;
-
-        }*/
-
-        public Task<DailyIncomeObject> GetDailyIncome(Guid IncomeId)
-        {
-            return Task.Run(() =>
-            {
-                try
-                {
-                    if (IncomeId != Guid.Empty)
-                    {
-                        DailyIncome entity = dailyIncomeRepo.GetAllIncluding(new Expression<Func<DailyIncome, object>>[]{
-                        d => d.Expenses}).Where(pt => pt.Id == IncomeId).FirstOrDefault<DailyIncome>();
-
-                        var obj = new MapperConfiguration(doj =>
-                        {
-                            doj.CreateMap<DailyIncome, DailyIncomeObject>();
-                        });
-
-                        IMapper iMapper = obj.CreateMapper();
-                        var destination = new DailyIncomeObject();
-
-                        destination.AmountMade = entity.AmountMade;
-                        destination.Balance = entity.Balance;
-                        destination.CompulsorySavings = entity.CompulsorySavings;
-                        destination.PercentageProfit = entity.PercentageProfit;
-                        destination.Profit = entity.Profit;
-                        /*destination.Expenses = dailyIncomeRepo.GetAll().Where(x => x.);*/
-
-                        /* List<ExpenseObject> expenses = new List<ExpenseObject>();
-                         var expenses = dailyIncomeRepo.GetAll().Where(x => x.DailyIncomeId == entity.Id)
-                         .Select(x => x. new ExpenseObject
-                         {
-                             Id = x.Id,
-
-                         })*/
-
-                        return destination;
-
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException();
-                    }
-                }
-                catch (Exception)
-                {
-
-                    throw;
-                }
-            });
         }
 
-        public Task<IList<DailyIncomeObject>> GetAllDailyIncomeSheet()
+        public IList<DailyIncomeObject> GetAllDailyIncomeSheet()
         {
-            throw new NotImplementedException();
+            try
+            {
+                List<DailyIncomeObject> dailyIncomeList = new List<DailyIncomeObject>();
+                foreach(DailyIncome source in (IEnumerable<DailyIncome>)dailyIncomeRepo.GetAll())
+                {
+                    DailyIncomeObject incomeObject = _Mapper.Map<DailyIncome, DailyIncomeObject>(source);
+                    dailyIncomeList.Add(incomeObject);
+                }
+
+                return (IList<DailyIncomeObject>)dailyIncomeList;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         public Task<Guid> CreateDailyIncome(DailyIncomeObject obj)
@@ -131,7 +76,6 @@ namespace BL.executors
 
                     if (obj.Id == Guid.Empty)
                     {
-                       /* obj.ModifiedDate = DateTime.Now;*/
 
                         var dataObj = new MapperConfiguration(doj =>
                         {
@@ -147,25 +91,10 @@ namespace BL.executors
                         source.Balance = obj.Balance;
                         source.CompulsorySavings = obj.CompulsorySavings;
                         source.PercentageProfit = obj.PercentageProfit;
-                        source.PercentageProfit = obj.Profit;
+                        source.Profit = obj.Profit;
                         source.DaillyAllowance = obj.DaillyAllowance;
-                        source.EntryDate = obj.Date;
+                        source.EntryDate = obj.EntryDate;
                         source.Expenses = obj.Expenses;
-
-                       /* if (source.Expenses.Count >= 0)
-                        {
-                            foreach (var item in source.Expenses)
-                            {
-                                source.Expenses.Add(new Expense
-                                {
-                                    Id = IdentityGenerator.NewSequentialGuid(),
-                                    DailyIncomeId = source.Id,
-                                    Amount = item.Amount,
-                                    Details = item.Details,
-                                    Date = item.Date
-                                });
-                            }
-                        }*/
 
                         dailyIncomeRepo.Add(source);
                         dailyIncomeRepo.UnitofWork.Commit();
@@ -187,14 +116,47 @@ namespace BL.executors
             });
         }
 
-        public Task<bool> RemoveDailyIncome(Guid IncomeId)
+        public Task<bool> RemoveDailyIncome(DailyIncomeObject obj)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                try
+                {
+
+                    if (obj.Id != Guid.Empty)
+                        dailyIncomeRepo.Delete(obj.Id);
+                    dailyIncomeRepo.UnitofWork.Commit();
+                    return true;
+
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            });
         }
 
-        public Task<bool> ChangeDailyIncome(DailyIncomeObject obj)
+        public Task<bool> UpdateDailyIncome(DailyIncomeObject obj)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                try
+                {
+
+                    DailyIncome entity = _Mapper.Map<DailyIncomeObject, DailyIncome>(obj);
+
+                    if (obj.Id != Guid.Empty)
+                        dailyIncomeRepo.Update(entity);
+                    dailyIncomeRepo.UnitofWork.Commit();
+
+                    return true;
+
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidOperationException(ex.Message);
+                }
+            });
         }
     }
 }

@@ -1,0 +1,74 @@
+<div class="page-header">
+  <h3 class="page-title">
+    {{pageTitle}}
+  </h3>
+</div>
+
+<div *ngIf="genEx" class="row">
+
+  <div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="card-title"> <span class="text-muted">Gen-Expense Details</span></h6>
+      <div class="row">
+        <div class="col-sm-6"></div>
+        <div class="col-sm-3"></div>
+        <div class="col-sm-3">
+          <button class="btn btn-sm btn-outline-primary btn-rounded btn-fw mr-2"
+                  routerLink="/expensehistory" title="Go Back">
+            <i class="mdi mdi-arrow-left-bold"></i>
+          </button>
+          <button class="btn btn-sm btn-outline-warning btn-rounded btn-fw"
+                  routerLink="/genexpense-detail/{{genEx.id}}/edit" title="Edit">
+            <i class="mdi mdi-pen"></i>
+          </button>
+        </div>
+      </div>
+       
+      </div>
+
+      <hr />
+
+      <div class="card-body">
+        <blockquote class="blockquote blockquote-primary">
+
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th class="font-weight-bold">.... </th>
+                  <th class="font-weight-bold">.... </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Date</td>
+                  <td><span class="font-weight-bold">{{genEx.expenseDate | date}}</span></td>
+                </tr>
+
+                <tr>
+                  <td>Amount</td>
+                  <td><span class="font-weight-bold"><i class="mdi mdi-currency-ngn"></i>{{genEx.amount}}</span></td>
+                </tr>
+
+                <tr>
+                  <td>Description</td>
+                  <td><span class="font-weight-bold">{{genEx.description}}</span></td>
+                </tr>
+
+                <tr>
+                  <td>Purpose</td>
+                  <td><span class="font-weight-bold">{{genEx.purpose}}</span></td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+
+        </blockquote>
+      </div>
+    </div>
+  </div>
+
+</div>
+

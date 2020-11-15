@@ -19,7 +19,7 @@
           </div>
           <div class=" col-md-3 col-xl-2">
             <p class="income-expense-summary-chart-legend"> <span style="border-color: #37ca32"></span> Total Income </p>
-            <h3>{{incomeTotal}}</h3>
+            <h3><i class="mdi mdi-currency-ngn"></i>{{incomeTotal}}</h3>
           </div>
           <!-- <div class="col-md-3 col-xl-2">
             <p class="income-expense-summary-chart-legend"> <span style="border-color: #37ca32"></span> Total Expense </p>
@@ -53,10 +53,10 @@
 
           <div class="col-sm-5 col-md-3 col-lg-2">
 
-            <button class="btn btn-sm btn-primary btn-rounded btn-fw"
+            <button class="btn btn-sm btn-outline-primary btn-rounded btn-fw"
                     title="Add Data"
                     (click)="AddIncomeLink()">
-              Add Data
+              <i class="mdi mdi-database-plus"></i>
             </button>
 
           </div>
@@ -90,11 +90,12 @@
                 <th></th>
                 <th></th>
                 <th></th>
+                <th></th>
                 <th>
-                      <span
-                      class="btn btn-sm btn-primary btn-rounded btn-fw ml-4" title="Add Data"
-                      (click)="AddIncomeLink()">Add Data
-                      </span>
+                  <span class="btn btn-sm btn-outline-primary btn-rounded btn-fw ml-4" title="Add Data"
+                        (click)="AddIncomeLink()">
+                    <i class="mdi mdi-database-plus"></i>
+                  </span>
                 </th>
               </tr>
               <hr/>
@@ -112,16 +113,22 @@
             <tbody>
 
               <tr *ngFor="let x of incomeHistory">
-                <td>{{x.entryDate}}</td>
-                <td><span class="badge badge-warning p-2">{{x.amountMade}}</span></td>
-                <td><span class="badge badge-danger p-2">{{x.expenses}}</span></td>
-                <td><span class="badge badge-info p-2">{{x.profit}}</span></td>
-                <td><span class="badge badge-success p-2">{{x.balance}}</span></td>
+                <td>{{x.entryDate | date}}</td>
+                <td><span class="badge badge-warning p-2"><i class="mdi mdi-currency-ngn"></i>{{x.amountMade}}</span></td>
+                <td><span class="badge badge-danger p-2"><i class="mdi mdi-currency-ngn"></i>{{x.expenses}}</span></td>
+                <td><span class="badge badge-info p-2"><i class="mdi mdi-currency-ngn"></i>{{x.profit}}</span></td>
+                <td><span class="badge badge-success p-2"><i class="mdi mdi-currency-ngn"></i>{{x.balance}}</span></td>
                 <td>
-                  <button class="btn btn-sm btn-outline-dark btn-rounded btn-fw"
-                  routerLink="/income-detail/{{x.id}}">
-                      Edit
-                  </button>
+                  <a class="text-primary ml-4 mr-4"
+                     routerLink="/income-detail/{{x.id}}" title="Details">
+                    <i class="mdi mdi-book-open-page-variant"></i>
+                  </a>
+
+                  <a class="text-danger"
+                    (click)="deleteIncome()" title="Delete">
+                    <i class="mdi mdi-close"></i>
+                  </a>
+
                 </td>
               </tr>
 

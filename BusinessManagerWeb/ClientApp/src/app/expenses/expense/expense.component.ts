@@ -41,7 +41,8 @@ export class ExpenseComponent implements OnInit, AfterViewInit, OnDestroy {
   expense = new Expense();
   private sub: Subscription;
   allExpenses: Expense[];
-  queryDate = new Date().toLocaleDateString();
+/*queryDate = new Date().toLocaleDateString();*/
+  queryDate: Date;
   expensesTotal: number = 0;
 
   filteredData: Expense[];
@@ -57,9 +58,9 @@ export class ExpenseComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private expenseService: ExpenseService,
     private notify: ToastrService,
-    private ngbCalendar: NgbCalendar,
-    private dateAdapter: NgbDateAdapter<string>,
-    private datePipe: DatePipe,
+    /*private ngbCalendar: NgbCalendar,
+    private dateAdapter: NgbDateAdapter<string>,*/
+    private datePipe: DatePipe
               ) {
 
   this.validationMessages = {
@@ -75,7 +76,7 @@ export class ExpenseComponent implements OnInit, AfterViewInit, OnDestroy {
 
   };
   this.genericValidator = new GenericValidator(this.validationMessages);
-  this.queryDate = this.datePipe.transform(this.queryDate, 'dd-MM-yyy');
+  /*this.queryDate = this.datePipe.transform(this.queryDate, 'dd-MM-yyy');*/
 
 
   }
@@ -83,7 +84,7 @@ export class ExpenseComponent implements OnInit, AfterViewInit, OnDestroy {
   search(filterBy: string): Expense[] {
    filterBy = filterBy.toLocaleLowerCase();
    return this.allExpenses.filter((expense: Expense) =>
-    expense.description.toLocaleLowerCase().indexOf(filterBy) !== -1);
+    expense.details.toLocaleLowerCase().indexOf(filterBy) !== -1);
   }
 
 
@@ -94,6 +95,7 @@ export class ExpenseComponent implements OnInit, AfterViewInit, OnDestroy {
         if (expenses != null) {
           this.allExpenses = expenses;
           this.filteredData = expenses;
+          this.filteredData.forEach(a => this.expensesTotal += a.amount)
         }
       },
       error: err => this.errorMessage = err
@@ -130,7 +132,7 @@ export class ExpenseComponent implements OnInit, AfterViewInit, OnDestroy {
   saveExpense(){
     console.log("Form Verified!!")
     this.mapEntity();
-    if (this.expense.id === null) {
+    if (this.newExpenseForm.valid) {
       this.expenseService.addExpense(this.expense)
         .subscribe({
             next: () => {
@@ -148,7 +150,11 @@ export class ExpenseComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   cancelEntry() {
-    // function that reloads the state when button is clicked
+    this.router.navigate(['/'])
+  }
+
+  deleteExpense() {
+    this.notify.warning('In-Ex Manager!', 'Unathourised Operation!');
   }
 
   get amount(){
@@ -164,10 +170,10 @@ export class ExpenseComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   mapEntity(): void {
-    this.expense.id = null;
+    /*this.expense.id = null;*/
     this.expense.amount = this.amount.value;
-    this.expense.description = this.description.value;
-    this.expense.expenseDate = this.expenseDate.value;
+    this.expense.details = this.description.value;
+    this.expense.date = this.expenseDate.value;
   }
 
 

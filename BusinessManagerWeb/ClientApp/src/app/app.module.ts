@@ -6,7 +6,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 
-import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
+// import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 
 
 import {TranslateModule} from '@ngx-translate/core';
@@ -28,10 +28,14 @@ import { ExpenseComponent } from './expenses/expense/expense.component';
 import { ExpenseHistoryComponent } from './expenses/expenseHistory/expenseHistory.component';
 import { ExpenseService } from './services/expense.service';
 import { IncomeService } from './services/income.service';
-import { IncomeData } from 'src/mock-data/income-data';
-import {  CustomAdapter, CustomDateParserFormatter } from './services/datepicker-adapter.service';
+// import { IncomeData } from 'src/mock-data/income-data';
+import { CustomAdapter, CustomDateParserFormatter } from './services/datepicker-adapter.service';
 import { IncomeDetailComponent } from './income/incomeDetail/incomeDetail.component';
 import { SortableDirective } from './services/sortable.directive';
+import { IncomeEditComponent } from './income/incomeEdit/incomeEdit.component';
+import { ExpenseEditComponent } from './expenses/expenseEdit/expenseEdit.component';
+import { GenExpenseComponent } from './expenses/gen-expense/gen-expense.component';
+import { GenExpenseDetailComponent } from './expenses/genExpenseDetail/gen-expense-detail.component';
 // import { ExpenseFilterService } from './services/expense-filter.service';
 
 
@@ -49,7 +53,10 @@ import { SortableDirective } from './services/sortable.directive';
     ExpenseComponent,
     ExpenseHistoryComponent,
     IncomeDetailComponent,
-
+    IncomeEditComponent,
+    ExpenseEditComponent,
+    GenExpenseComponent,
+    GenExpenseDetailComponent
 
    ],
 
@@ -70,10 +77,15 @@ import { SortableDirective } from './services/sortable.directive';
       { path: 'incomehistory', component: IncomeHistoryComponent },
       { path: 'expense', component: ExpenseComponent },
       { path: 'expensehistory', component: ExpenseHistoryComponent },
-      { path: 'income-detail/:id', component: IncomeDetailComponent }
+      { path: 'income-detail/:id', component: IncomeDetailComponent },
+      { path: 'income-detail/:id/edit', component: IncomeEditComponent },
+      { path: 'expense/:id/edit', component: ExpenseEditComponent },
+      { path: 'genexpense', component: GenExpenseComponent },
+      { path: 'genexpense-detail/:id', component: GenExpenseDetailComponent },
+      { path: 'genexpense-detail/:id/edit', component: GenExpenseComponent }
 
     ]),
-    InMemoryWebApiModule.forRoot(IncomeData),
+    // InMemoryWebApiModule.forRoot(IncomeData),
     TranslateModule.forRoot(),
     NgbModule,
     BsDatepickerModule.forRoot(),
@@ -93,7 +105,7 @@ import { SortableDirective } from './services/sortable.directive';
     {provide: NgbDateAdapter, useClass: CustomAdapter},
     {provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter},
     DecimalPipe,
-    SortableDirective
+    /*SortableDirective*/
     /*{ provide: 'BASE_URL', useFactory: getBaseUrl }*/
 
   ],

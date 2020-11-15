@@ -12,9 +12,5 @@ namespace Domain_Modules.objects
             public DateTime Date { get; set; }
             
 
-            /*This instantiates a relationship with Daily Income*/
-        /*    public Guid DailyIncomeId { get; set; }
-            public virtual DailyIncome DailyIncome { get; set; }*/
-
     }
 }

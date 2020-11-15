@@ -16,7 +16,7 @@ export class IncomeDetailComponent implements OnInit {
   errorMessage = '';
 
   income: Income;
-  date: string;
+  date: Date;
   incomeExpenses: Expense[];
   expenseTotal: number = 0;
 
@@ -28,12 +28,12 @@ export class IncomeDetailComponent implements OnInit {
   ngOnInit() {
     const stateParams = this.route.snapshot.paramMap.get('id');
     if(stateParams != null) {
-      const id = +stateParams;
+      const id = stateParams;
       this.getIncome(id);
     }
   }
 
-  getIncome(id: number) {
+  getIncome(id: string): void {
     this.service.getIncomeDetail(id).subscribe({
       next: income => this.income = income,
       error: err => this.errorMessage = err
@@ -48,5 +48,12 @@ export class IncomeDetailComponent implements OnInit {
       )
     }
   }
+
+  /*getProduct(id: number): void {
+    this.productService.getProduct(id).subscribe({
+      next: product => this.product = product,
+      error: err => this.errorMessage = err
+    });
+  }*/
 
 }

@@ -40,14 +40,14 @@ namespace BusinessManagerWeb
             
             services.AddScoped<IDailyIncomeLogic, DailyIncomeExecutor>();
             services.AddScoped<IExpenseLogic, ExpenseExecutor>();
+            services.AddScoped<IGenExpenseLogic, GenExpenseExecutor>();
 
 
 
-            services.AddControllersWithViews();
+            services.AddControllers();
+            /*services.AddCors();*/
+
             // In production, the Angular files will be served from this directory
-
-
-
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
@@ -77,12 +77,14 @@ namespace BusinessManagerWeb
 
             app.UseRouting();
 
+           /* app.UseCors(m => m.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());*/
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
-                
+                //endpoints.MapControllerRoute(
+                //    name: "default",
+                //    pattern: "{controller}/{action=Index}/{id?}");
+                endpoints.MapDefaultControllerRoute();
             });
 
             app.UseSpa(spa =>

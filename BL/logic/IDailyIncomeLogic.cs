@@ -8,11 +8,11 @@ namespace BL.logic
 {
     public interface IDailyIncomeLogic
     {
-        Task<DailyIncomeObject> GetDailyIncome(Guid IncomeId);
-        Task<IList<DailyIncomeObject>> GetAllDailyIncomeSheet();
+        DailyIncomeObject GetDailyIncome(Guid IncomeId);
+        IList<DailyIncomeObject> GetAllDailyIncomeSheet();
         Task<Guid> CreateDailyIncome(DailyIncomeObject obj);
-        Task<bool> ChangeDailyIncome(DailyIncomeObject obj);
-        Task<bool> RemoveDailyIncome(Guid IncomeId);
+        Task<bool> UpdateDailyIncome(DailyIncomeObject obj);
+        Task<bool> RemoveDailyIncome(DailyIncomeObject obj);
 
     }
 }

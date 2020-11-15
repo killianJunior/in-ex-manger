@@ -11,16 +11,16 @@ namespace Engine.dbConfiguration
     public static class DependencyInjection
     {
 
-     public static void ConfigureServices(IServiceCollection serviceCollection)
-    {
+        public static void ConfigureServices(IServiceCollection serviceCollection)
+        {
 
-        serviceCollection.AddScoped<IDailyIncomeRepository, DailyIncomeRepository>();
+            serviceCollection.AddScoped<IDailyIncomeRepository, DailyIncomeRepository>();
 
-        serviceCollection.AddScoped<IExpenseRepository, ExpenseRepository>();
+            serviceCollection.AddScoped<IExpenseRepository, ExpenseRepository>();
 
-        
-       
-    }
+            serviceCollection.AddScoped<IGenExpenseRepository, GenExpenseRepository>();
+
+        }
   
     }
 }

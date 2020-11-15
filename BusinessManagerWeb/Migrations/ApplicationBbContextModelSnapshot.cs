@@ -73,6 +73,30 @@ namespace BusinessManagerWeb.Migrations
 
                     b.ToTable("Expenses");
                 });
+
+            modelBuilder.Entity("Domain_Modules.objects.GenExpense", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ExpenseDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Purpose")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GenExpenses");
+                });
 #pragma warning restore 612, 618
         }
     }

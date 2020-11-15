@@ -2,35 +2,6 @@
   <h3 class="page-title">
     {{pageTitle}}
   </h3>
-
- 
-  <!-- <div class="ml-3">
-    <span class="icon-holder">
-      <i class="icon-wallet"></i>
-      <h4 class="mb-0 text-success">{{income.balance}}</h4>
-    </span>
-  </div> -->
-
-  <!-- <div class="col-sm-3 grid-margin stretch-card">
-    <div class="card quick-status-card">
-      <div class="card-body">
-        <h4 class="card-title">{{income.entryDate}} Balance </h4>
-        <div class="row">
-          <div class="col-12">
-            <div class="wrapper py-4 d-flex border-bottom">
-              <span class="icon-holder">
-                <i class="icon-wallet"></i>
-              </span>
-              <div class="ml-3">
-                <h4 class="mb-0 text-success">{{income.balance}}</h4>
-              </div>
-            </div>
-
-          </div>
-        </div>
-        </div>
-    </div>
-  </div> -->
 </div>
 
 <div *ngIf="income" class="row">
@@ -38,15 +9,28 @@
   <div class="col-md-6 grid-margin stretch-card">
     <div class="card">
       <div class="card-body">
-        <h6 class="card-title"> {{income.entryDate}} <span class="text-muted">Entry Details</span></h6>
-        <p class="card-description">
-          Details for <span class="badge badge-success p-2">{{income.amountMade}}</span>
-        </p>
-        <!-- <span class="mr-3">
-          <i class="icon-wallet"></i>
-        </span>
-        <h4 class="mr-o text-success">{{income.balance}}</h4> -->
+        <h6 class="card-title"> {{income.entryDate | date }} <span class="text-muted">Entry Details</span></h6>
+        <!-- <p class="card-description">
+    Details for <span class="badge badge-success p-2">{{income.amountMade}}</span>
+  </p>-->
+      <div class="row">
+        <div class="col-sm-6"></div>
+        <div class="col-sm-3"></div>
+        <div class="col-sm-3">
+          <button class="btn btn-sm btn-outline-primary btn-rounded btn-fw mr-2"
+                  routerLink="/incomehistory" title="Go Back">
+            <i class="mdi mdi-arrow-left-bold"></i>
+          </button>
+          <button class="btn btn-sm btn-outline-warning btn-rounded btn-fw"
+                  routerLink="/income-detail/{{income.id}}/edit" title="Edit">
+            <i class="mdi mdi-pen"></i>
+          </button>
+        </div>
       </div>
+       
+      </div>
+
+      <hr />
 
       <div class="card-body">
         <blockquote class="blockquote blockquote-primary">
@@ -62,40 +46,45 @@
               <tbody>
                 <tr>
                   <td>Entry Date</td>
-                  <td><span>{{income.entryDate}}</span></td>
+                  <td><span class="font-weight-bold">{{income.entryDate | date}}</span></td>
                   <!-- <td>
-                    <button class="btn btn-sm btn-outline-dark btn-rounded btn-fw"
-                    routerLink="/income-detail/{{income.id}}">
-                        Edit
-                    </button>
-                  </td> -->
+                <button class="btn btn-sm btn-outline-dark btn-rounded btn-fw"
+                routerLink="/income-detail/{{income.id}}">
+                    Edit
+                </button>
+              </td> -->
                 </tr>
 
                 <tr>
                   <td>Amount</td>
-                  <td><span>{{income.amountMade}}</span></td>
+                  <td><span class="font-weight-bold"><i class="mdi mdi-currency-ngn"></i>{{income.amountMade}}</span></td>
                 </tr>
 
                 <tr>
                   <td>Profit</td>
-                  <td><span>{{income.profit}}</span></td>
+                  <td><span class="font-weight-bold">{{income.profit}}</span></td>
                 </tr>
 
                 <tr>
                   <td>% Profit</td>
-                  <td><span>{{income.percentageProfit}}</span></td>
+                  <td><span class="font-weight-bold">{{income.percentageProfit}}</span></td>
                 </tr>
 
                 <tr>
                   <td>Allowance</td>
-                  <td><span>{{income.dailyAllowance}}</span></td>
+                  <td><span class="font-weight-bold">{{income.daillyAllowance}}</span></td>
                 </tr>
 
                 <tr>
                   <td>Amount Saved</td>
-                  <td><span>{{income.savings}}</span></td>
+                  <td><span class="font-weight-bold">{{income.compulsorySavings}}</span></td>
                 </tr>
-  
+
+                <tr>
+                  <td>Balance</td>
+                  <td><span class="font-weight-bold">{{income.balance}}</span></td>
+                </tr>
+
               </tbody>
             </table>
           </div>
@@ -108,10 +97,9 @@
   <div class="col-md-6 grid-margin stretch-card">
     <div class="card">
       <div class="card-body">
-        <h6 class="card-title"> {{income.entryDate}} Expenses</h6>
+        <h6 class="card-title"> {{income.entryDate | date}} Expenses</h6>
       </div>
       <div class="card-body">
-        <blockquote class="blockquote blockquote-primary">
 
           <div class="table-responsive">
             <table class="table table-hover table-bordered">
@@ -130,14 +118,13 @@
                 </tr>
                 <tr>
                   <td>Total</td>
-                  <td><label class="badge badge-success p-2">{{income.expenses}}</label></td>
+                  <td><label class="badge badge-success p-2"><i class="mdi mdi-currency-ngn"></i>{{income.expenses}}</label></td>
                   <td></td>
                 </tr>
               </tbody>
             </table>
           </div>
 
-        </blockquote>
       </div>
     </div>
   </div>

@@ -1,9 +1,9 @@
 export class Genexpense {
 
-  id: number;
+  id: string;
   amount: number;
   description: string;
-  expenseDate: string;
+  expenseDate: Date;
   purpose: string;
 
 }

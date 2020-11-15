@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChildren, TemplateRef } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChildren, TemplateRef, PipeTransform } from '@angular/core';
 import { FormBuilder, FormControl, FormControlName, FormGroup, Validators } from '@angular/forms';
-import { fromEvent, merge, Observable } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { fromEvent, merge, BehaviorSubject, Observable, of, Subject, } from 'rxjs';
+import { debounceTime, map, startWith, delay, switchMap, tap  } from 'rxjs/operators';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 import { Genexpense } from 'src/app/data-model/genexpense';
@@ -9,6 +9,8 @@ import { GenericValidator } from 'src/app/directives/generic--validator';
 import { GenexpenseService } from 'src/app/services/genexpense.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { DecimalPipe } from '@angular/common';
+
 
 @Component({
   selector: 'app-expenseHistory',
@@ -21,149 +23,90 @@ export class ExpenseHistoryComponent implements OnInit {
 
     pageTitle = 'General Expenses'
 
-    genEx = new Genexpense();
     genExs: Genexpense[];
-    genExForm: FormGroup;
     genExpenseTotal: number = 0;
+
+  filteredGenExs: Observable<Genexpense[]>;
+
+  filteredPag: Genexpense[];
+
+/*
+    page = 1;
+    pageSize = 4;*/
+
 
     modalRef: BsModalRef;
     message: string;
     errorMessage: string;
+    collectionSize: Observable<number>;
 
-    displayMessage: { [key: string]: string } = {};
-    private validationMessages: { [key: string]: { [key: string]: string } };
-    private genericValidator: GenericValidator;
+    filter = new FormControl('');
+   
 
-  constructor(private genServices: GenexpenseService,
-              private fb: FormBuilder,
-              private modalService: BsModalService,
-              private notify: ToastrService,
-              private router: Router){
-  this.validationMessages = {
-    amount: {
-      required: 'Specify expense amount'
-    },
-    description: {
-      required: 'Expense description is required'
-    },
-    expenseDate: {
-      required: 'Select Date'
-    },
-    purpose: {
-      required: 'Please Specify expense purpose.'
+    constructor(private genServices: GenexpenseService,
+      private modalService: BsModalService,
+      private router: Router,
+      private notify: ToastrService,
+      pipe: DecimalPipe)
+    {
+      /*this is working*/
+      this.filteredGenExs = this.filter.valueChanges.pipe(
+        startWith(''),
+        map(text => this.searchExpenses(text, pipe))
+      ); 
+
     }
-
-  };
-  this.genericValidator = new GenericValidator(this.validationMessages);
- }
 
   ngOnInit() {
     this.genServices.getGenExpenses().subscribe(
       data => {
-        this.genExs = data;
+        this.genExs = data
         this.genExs.forEach(c => this.genExpenseTotal += c.amount);
         console.log(this.genExpenseTotal)
+/*        this.collectionSize = this.genExs.length;
+        this.refreshExpenses();*/
       },
       error => {
-        console.log('httperror:');
-        console.log(error);
+        this.notify.error('In-Ex Manager!', 'Operation Failed!!!')
       })
-  }
-
-  // ngAfterViewInit(): void{
-  //   const controlBlurs: Observable<any>[] = this.formInputElements
-  //     .map((formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur'));
-
-  //   merge(this.genExForm.valueChanges, ...controlBlurs).pipe(
-  //     debounceTime(800)
-  //   ).subscribe(value => {
-  //     this.displayMessage = this.genericValidator.processMessages(this.genExForm);
-  //   });
-  // }
-
-  // ngOnDestroy(): void {
-  //   // this.sub.unsubscribe();
-  // }
-
-  createGenExForm() {
-      this.genExForm = this.fb.group({
-        amount: ['', Validators.required ],
-        description: ['', Validators.required ],
-        expenseDate: ['', Validators.required ],
-        purpose: ['', Validators.required]
-      })
-  }
-
-  get amount(){
-    return this.genExForm.controls.amount as FormControl;
-  }
-
-  get description(){
-    return this.genExForm.controls.description as FormControl;
-  }
-
-  get expenseDate(){
-    return this.genExForm.controls.expenseDate as FormControl;
-  }
-
-  get purpose(){
-    return this.genExForm.controls.purpose as FormControl;
-  }
-
-  mapEntity(): void {
-    this.genEx.id = null;
-    this.genEx.amount = this.amount.value;
-    this.genEx.description = this.description.value;
-    this.genEx.expenseDate = this.expenseDate.value;
-    this.genEx.purpose = this.purpose.value;
-  }
-
-  // openModal(template: TemplateRef<any>) {
-  //   this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
-  // }
-
-  openModal(template: TemplateRef<any>) {
-    this.createGenExForm();
-    this.modalRef = this.modalService.show(
-      template,
-      Object.assign({}, { class: 'modal-md' })
-    );
-  }
-
-  // confirm(): void {
-  //   this.message = 'Confirmed!';
-  //   this.modalRef.hide();
-  // }
-
-  decline(): void {
-    // this.message = 'Declined!';
-    this.modalRef.hide();
-  }
-
-  saveExpense(){
-    this.mapEntity();
-    if(this.genEx.id === null && this.genEx.amount != null) {
-      this.genServices.addGenExpense(this.genEx)
-        .subscribe({
-          next: () => {
-            console.log(this.genEx)
-            this.modalRef.hide();
-            this.notify.success('In-Ex Manager!', 'Gen-Expense Added!');
-            this.router.navigateByUrl('/', {skipLocationChange: true})
-            .then(()=>this.router.navigate(['/expensehistory']));
-          },
-          error: err => this.errorMessage = err
-        })
-    } else {
-      this.notify.error('In-Ex Manager!', 'Operation Failed!!!')
-    }
-  }
-
-  cancel() {
-    if(this.genEx.amount === null){
-      this.modalRef.hide();
-    }
 
   }
+
+
+  addExpenseLink() {
+    this.router.navigate(['/genexpense']);
+  }
+
+  deleteGenExpense() {
+    this.notify.warning('In-Ex Manager!', 'Unathourised Operation!');
+  }
+
+/*search(text: string, pipe: PipeTransform): Genexpense[] {
+  return this.filteredGenExs.filter(data => {
+    const term = text.toLowerCase();
+    return data.description.toLowerCase().includes(term)
+      || pipe.transform(data.purpose).includes(term)
+      || pipe.transform(data.amount).includes(term)
+      || pipe.transform(data.expenseDate).includes(term);
+  });
+}*/
+
+  /*this is working*/
+  searchExpenses(text: string, pipe: PipeTransform): Genexpense[] {
+    return this.genExs.filter(data => {
+      const term = text.toLowerCase();
+      return data.description.toLowerCase().includes(term)
+        || pipe.transform(data.amount).includes(term);
+       /* || pipe.transform(data.expenseDate).includes(term);*/
+    });
+  }
+
+ /* refreshExpenses() {
+    this.genExs = this.filteredPag
+      .map((ax, i) => ({ id: i + 1, ...ax }))
+      .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
+  }*/
+
 
 }
+

@@ -9,47 +9,41 @@ import { Expense } from '../data-model/expense';
 })
 export class ExpenseService {
 
-  private baseUrl = 'api/exData';
-  // private baseExUrl = 'api/expenses'
+  // private baseUrl = 'api/exData' api/dailyIncomes/dailyIncomes;
+  private baseUrl = 'api/expenses/'
 
-  constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) { }
+  constructor(private http: HttpClient) { }
 
   getExpenses(): Observable<Expense[]> {
-    return this.http.get<Expense[]>(this.baseUrl).pipe(
-      tap(data => console.log('Successful')),
-      catchError(this.handleError)
-    );
+    return this.http.get<Expense[]>(this.baseUrl + 'expenses');
   }
 
-  getExpensesByDate(date:string): Observable<Expense[]>{
+  getExpensesByDate(date: Date): Observable<Expense[]>{
     return this.http.get<Expense[]>(this.baseUrl).pipe(
       map(data => {
-        return data.filter(d => d.expenseDate === date);
+        return data.filter(d => d.date === date);
       })
     );
   }
 
-  addExpense(expense: Expense): Observable<Expense> {
-   const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-   expense.id = null;
-    return this.http.post<Expense>(this.baseUrl, expense, { headers })
-    .pipe(
-      tap(data => console.log('Successful!!')),
-      catchError(this.handleError)
-    )
+  getExpenseDetail(id: string): Observable<Expense> {
+    return this.http.get<Expense>(this.baseUrl + 'expense/' + id);
   }
 
-  private handleError(err): Observable<never> {
+  addExpense(expense: Expense): Observable<Expense> {
+   const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<Expense>(this.baseUrl + 'addExpense', expense, { headers });
+  }
 
-    let errorMessage: string;
-    if (err.error instanceof ErrorEvent) {
-      errorMessage = `An error occurred: ${err.error.message}`;
-    } else {
+  updateExpense(expense: Expense): Observable<Expense> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.put<Expense>(this.baseUrl + 'updateExpense/' + expense.id, expense, { headers });
+  }
 
-      errorMessage = `Backend returned code ${err.status}: ${err.body.error}`;
-    }
-    console.error(err);
-    return throwError(errorMessage);
+  deleteExpense(expense: Expense): Observable<{}> {
+    const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+    return this.http.delete<Expense>(this.baseUrl + 'deleteExpense' + expense.id,
+      httpOptions);
   }
 
 }

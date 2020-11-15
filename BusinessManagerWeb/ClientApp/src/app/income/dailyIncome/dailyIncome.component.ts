@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChildren } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormControlName, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
 import { fromEvent, merge, Observable, Subscription } from 'rxjs';
@@ -27,7 +27,8 @@ export class DailyIncomeComponent implements OnInit, AfterViewInit, OnDestroy {
   income = new Income();
   private sub: Subscription;
   latestExpenses: Expense[];
-  queryDate = new Date().toLocaleDateString();
+/*queryDate = new Date().toLocaleDateString();*/
+  queryDate = new Date();
   expensesTotal: number = 0;
 
   newIncomeForm: FormGroup;
@@ -42,7 +43,8 @@ export class DailyIncomeComponent implements OnInit, AfterViewInit, OnDestroy {
               private incomeService: IncomeService,
               private expenseService: ExpenseService,
               private datePipe: DatePipe,
-              private notify: ToastrService) {
+              private notify: ToastrService,
+              private route: ActivatedRoute) {
 
     // Validation Messages for income form!!!
 
@@ -64,26 +66,42 @@ export class DailyIncomeComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     };
     this.genericValidator = new GenericValidator(this.validationMessages);
-    this.queryDate = this.datePipe.transform(this.queryDate, 'dd-MM-yyy');
+   /* this.queryDate = this.datePipe.transform(this.queryDate, 'dd-MM-yyy');*/
 
    }
 
-   ngOnInit() {
-    this.createNewIncomeForm();
-    // console.log(this.queryDate);
-    this.expenseService.getExpensesByDate(this.queryDate).subscribe(
+  ngOnInit() {
+     this.createNewIncomeForm();
+
+  /*Read Data Id from Route Parameter*/
+
+  /*  this.sub = this.route.paramMap.subscribe(
+      params => {
+        const id = params.get('id');
+        this.getIncome(id);
+      })*/
+
+    /*this.expenseService.getExpensesByDate(this.queryDate).subscribe(
       data => {
       this.latestExpenses = data;
       this.latestExpenses.forEach(a => this.expensesTotal += a.amount);
-      // console.log(data);
-      // console.log(this.expensesTotal)
       },
       error => {
         console.log('httperror:');
         console.log(error);
-      })
+      })*/
 
   }
+
+  /*getIncome(id: string): void {
+    this.incomeService.getIncomeDetail(id)
+      .subscribe({
+        next: (income: Income) => this.displayIncome(income),
+        error: err => this.errorMessage = err
+      });
+    console.log(this.income)
+  }*/
+
 
   ngAfterViewInit(): void{
 
@@ -102,7 +120,7 @@ export class DailyIncomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // this.sub.unsubscribe();
+   /*  this.sub.unsubscribe();*/
   }
 
   createNewIncomeForm() {
@@ -141,39 +159,60 @@ export class DailyIncomeComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.newIncomeForm.controls.entryDate as FormControl;
   }
 
-  // createExpenseDateForm() {
-  //   this.expenseDateForm = this.fb.group({
-  //     expenseDate: [null, Validators.required]
-  //   });
-  // }
-
-  // get expenseDate(){
-  //   return this.expenseDateForm.controls.expenseDate as FormControl;
-  // }
-
-  // mapExpenseDateQuery(): void {
-  //   this.expenseDateId = this.expenseDate.value;
-  // }
-
-  // getDatedExpenses(){
-
-  // }
-
   saveIncome() {
     console.log("Form Verified!!")
     this.mapEntity();
-    if (this.income.id === null ) {
-      this.incomeService.addIncome(this.income)
+    if (this.newIncomeForm.valid) {
+      console.log(this.income)
+      this.incomeService.createIncome(this.income)
         .subscribe({
           next: () => {
-            this.router.navigate(['/incomehistory']),
-            this.notify.success('In-Ex Manager!', 'Income Added!');
+            this.notify.success('In-Ex Manager!', 'Income Added!'),
+            this.router.navigate(['/incomehistory']);
           },
-          error: err => this.errorMessage = err
+          error: err => this.notify.error('InEx-Manager!', 'Operation Failed')
+
         })
     } else {
       this.notify.error('InEx-Manager!', 'Operation Failed');
     }
+  }
+
+
+ /* saveIncome() {
+      console.log('Form Verified')
+      if (this.newIncomeForm.valid) {
+        this.mapEntity();
+        if (this.income.identifier === false) {
+          console.log(this.income)
+          this.incomeService.createIncome(this.income)
+            .subscribe({
+              next: () => this.onSaveCompleteSuccess(),
+              error: err => this.notify.error('InEx-Manager!', 'Operation Failed')
+            });
+        }
+        if (this.income.id != null) {
+          this.incomeService.updateIncome(this.income)
+            .subscribe({
+              next: () => this.onUpdateComplete(),
+              error: err => this.notify.error('InEx-Manager!', 'Operation Failed')
+            });
+        }
+      } else {
+        this.onSaveCompleteSuccess();
+      }
+  }*/
+
+  onSaveCompleteSuccess(): void {
+    this.notify.success('In-Ex Manager!', 'Income Added!')
+    this.newIncomeForm.reset();
+    this.router.navigate(['/incomehistory']);
+  }
+
+  onUpdateComplete(): void {
+    this.notify.success('In-Ex Manager!', 'Income Updated!')
+    this.newIncomeForm.reset();
+    this.router.navigate([`/income-detail/${this.income.id}`]);
   }
 
   cancelEntry(){
@@ -181,22 +220,41 @@ export class DailyIncomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   mapEntity(): void {
-    this.income.id = null;
     this.income.amountMade = this.amountMade.value;
     this.income.expenses = this.expenses.value;
-    this.income.dailyAllowance = this.dailyAllowance.value;
+    this.income.daillyAllowance = this.dailyAllowance.value;
     let leftover = this.amountMade.value - this.expenses.value;
     this.income.profit = leftover - this.dailyAllowance.value;
-    this.income.percentageProfit = (10/100) * this.income.profit;
+    this.income.percentageProfit = (10 / 100) * this.income.profit;
     this.income.entryDate = this.entryDate.value;
-    this.income.savings = this.savings.value;
-     let myValue = this.income.profit - this.income.percentageProfit;
-    this.income.balance = myValue - this.income.savings;
+    this.income.compulsorySavings = this.savings.value;
+    let myValue = this.income.profit - this.income.percentageProfit;
+    this.income.balance = myValue - this.income.compulsorySavings;
 
   }
 
   AddExpenseLink() {
     this.router.navigate(['/expense']);
   }
+
+
+ /* displayIncome(income: Income): void {
+    if (this.newIncomeForm) {
+      this.newIncomeForm.reset();
+    }
+    this.income = income;
+    if (!this.income) {
+      this.pageTitle = 'New Income Entry';
+    } else {
+      this.pageTitle = 'Income Entry Edit';
+    }
+    this.newIncomeForm.patchValue({
+      entryDate: this.income.entryDate,
+      amountMade: this.income.amountMade,
+      dailyAllowance: this.income.daillyAllowance,
+      savings: this.income.compulsorySavings,
+      expenses: this.income.expenses
+    });
+  }*/
 
 }

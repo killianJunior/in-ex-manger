@@ -1,9 +1,9 @@
 export class Income {
-  id:number;
+  id: number;
   amountMade: number;
-  entryDate: string;
-  dailyAllowance: number;
-  savings: number;
+  entryDate: Date;
+  daillyAllowance: number;
+  compulsorySavings: number;
   profit: number;
   percentageProfit: number;
   balance: number;

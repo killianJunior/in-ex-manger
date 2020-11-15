@@ -1,5 +1,6 @@
 ﻿using app.domain.seedwork;
 using AutoMapper;
+using BL.helpers;
 using BL.logic;
 using Domain_Modules.dt_Objects;
 using Domain_Modules.objects;
@@ -15,16 +16,35 @@ namespace BL.executors
 {
     public class ExpenseExecutor : IExpenseLogic
     {
-
+        IMapper _Mapper;
         IExpenseRepository expenseRepo;
 
         public ExpenseExecutor(IExpenseRepository _repo)
         {
+            _Mapper = new Mapper(AppAdapterConfig.GetAppContextConfig());
             expenseRepo = _repo;
         }
-        public Task<bool> ChangeExpense(ExpenseObject obj)
+        public Task<bool> UpdateExpense(ExpenseObject obj)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                try
+                {
+
+                    Expense entity = _Mapper.Map<ExpenseObject, Expense>(obj);
+
+                    if (obj.Id != Guid.Empty)
+                        expenseRepo.Update(entity);
+                    expenseRepo.UnitofWork.Commit();
+
+                    return true;
+
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidOperationException(ex.Message);
+                }
+            });
         }
 
         public Task<Guid> CreateExpense(ExpenseObject obj)
@@ -35,7 +55,6 @@ namespace BL.executors
                 {
                     if (obj.Id == Guid.Empty)
                     {
-                       /* obj.ModifiedDate = DateTime.Now;*/
 
                         var dataObj = new MapperConfiguration(ap =>
                         {
@@ -70,88 +89,59 @@ namespace BL.executors
             });
         }
 
-        public Task<IList<ExpenseObject>> GetAllExpenseSheet()
+        public IList<ExpenseObject> GetAllExpenseSheet()
         {
-            throw new NotImplementedException();
-
-/*
-            return Task.Run(() =>
+            try
             {
-                try
+                List<ExpenseObject> exObjecttList = new List<ExpenseObject>();
+                foreach (Expense source in (IEnumerable<Expense>)expenseRepo.GetAll())
                 {
-                    using (var _uow = new CBAUoW())
-                    {
-                        var entities = _uow.Agent.GetAll().Where(x => x.isDelete == false);
-
-                        if (entities.Count() > 0)
-                        {
-                            IList<AgentObject> list = new List<AgentObject>();
-                            foreach (var entity in entities)
-                            {
-                                var obj = AutoMapper.Mapper.DynamicMap<Agent, AgentObject>(entity);
-
-                                obj.FullName = entity.FullName;
-
-                                list.Add(obj);
-
-                            }
-
-                            return list;
-                        }
-                        else
-                        {
-                            throw new InvalidOperationException();
-                        }
-                    }
-
+                    ExpenseObject exObject = _Mapper.Map<Expense, ExpenseObject>(source);
+                    exObjecttList.Add(exObject);
                 }
-                catch (Exception)
-                {
 
-                    return null;
-                }
-            });*/
+                return (IList<ExpenseObject>)exObjecttList;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+
+
         }
 
-        public Task<ExpenseObject> GetExpense(Guid ExpenseId)
+        public ExpenseObject GetExpense(Guid ExpenseId)
+        {
+            try
+            {
+
+                return _Mapper.Map<Expense, ExpenseObject>(expenseRepo.GetById(ExpenseId));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public Task<bool> RemoveExpense(ExpenseObject obj)
         {
             return Task.Run(() =>
             {
                 try
                 {
-                    if (ExpenseId != Guid.Empty)
-                    {
-                        Expense entity = expenseRepo.GetAllIncluding(new Expression<Func<Expense, object>>[] { }).Where(pt => pt.Id == ExpenseId).FirstOrDefault<Expense>();
-                        var obj = new MapperConfiguration(doj =>
-                        {
-                            doj.CreateMap<Expense, ExpenseObject>();
-                        });
 
-                        IMapper iMapper = obj.CreateMapper();
-                        var destination = new ExpenseObject();
+                    if (obj.Id != Guid.Empty)
+                        expenseRepo.Delete(obj.Id);
+                    expenseRepo.UnitofWork.Commit();
+                    return true;
 
-                        destination.Amount = entity.Amount;
-                        destination.Details = entity.Details;
-                        destination.Date = entity.Date;
-
-                        return destination;
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException();
-                    }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-
-                    throw;
+                    throw ex;
                 }
             });
-        }
-
-        public Task<bool> RemoveExpense(Guid ExpenseId)
-        {
-            throw new NotImplementedException();
         }
     }
 }

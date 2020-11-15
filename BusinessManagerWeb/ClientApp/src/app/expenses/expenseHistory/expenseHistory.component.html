@@ -19,7 +19,7 @@
           </div>
           <div class=" col-md-3 col-xl-2">
             <p class="income-expense-summary-chart-legend"> <span style="border-color: #37ca32"></span> Total Gen-Expense </p>
-            <h3>{{genExpenseTotal}}</h3>
+            <h3><i class="mdi mdi-currency-ngn"></i>{{genExpenseTotal}}</h3>
           </div>
         </div>
         <div class="row income-expense-summary-chart mt-3">
@@ -32,29 +32,78 @@
 </div>
 
 <div class="row">
-  <div class="col-lg-12 grid-margin stretch-card">
+
+  <div *ngIf="!genExs" class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <div class="row icons-list">
+          <div class="col-sm-3 col-md-2 col-lg-1">
+            <i class="mdi mdi-laptop-chromebook"></i>
+          </div>
+
+          <div class="col-sm-5 col-md-3 col-lg-2">
+            <h3 class="badge badge-info p-2">No Data to Display</h3>
+          </div>
+
+          <div class="col-sm-5 col-md-3 col-lg-2">
+
+            <span class="btn btn-sm btn-outline-primary btn-rounded btn-fw ml-4" title="Add Data"
+                  (click)="addExpenseLink()">
+              <i class="mdi mdi-database-plus"></i>
+            </span>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <form> Filter -->
+  <!--<div class="form-group form-inline">
+    <label>Filter By</label>
+    <input class="form-control ml-2" type="text" [(ngModel)]="listFilter" />
+  </div>-->
+
+  <div *ngIf="genExs" class="col-lg-12 grid-margin stretch-card">
     <div class="card">
       <div class="card-body">
         <h6 class="card-title">General Expense List</h6>
-        <hr/>
+        <hr />
 
         <div class="row">
-          <div class="col-sm-4">
+          <div class="col-sm-3">
+            <form>
+           <div class="form-group form-inline">
+                  Full text search: <input class="form-control ml-2" type="text" [formControl]="filter" />
+                </div>
 
-           </div>
-           <div class="col-sm-4">
+              <!--<div class="form-group form-inline">
+                Full text search: <input class="form-control ml-2" type="text" name="searchTerm" [(ngModel)]="genServices.searchTerm" />
+                <span class="ml-3" *ngIf="genServices.loading$ | async">Loading...</span>
+              </div>-->
+            </form>
+          </div>
+          <div class="col-sm-3">
 
-           </div>
-           <div class="col-sm-4">
-            <span class="btn btn-sm btn-primary btn-rounded btn-fw pull-right"
-                        title="Filter"
-                        (click)="openModal(template)">
-                  Enter Expense
+          </div>
+          <div class="col-sm-3">
+
+          </div>
+          <div class="col-sm-3">
+            <!-- <span class="btn btn-sm btn-primary btn-rounded btn-fw pull-right"
+                  title="Filter"
+                  (click)="openModal(template)">
+              Enter Expense
+            </span>-->
+            <span class="btn btn-sm btn-outline-primary btn-rounded btn-fw mr-0" title="Add Data"
+                  (click)="addExpenseLink()">
+              <i class="mdi mdi-database-plus"></i>
             </span>
           </div>
         </div>
 
-        <hr/>
+        <hr />
 
         <div class="table-responsive pt-3">
 
@@ -65,18 +114,60 @@
                 <th class="font-weight-bold">Date</th>
                 <th class="font-weight-bold">Purpose</th>
                 <th class="font-weight-bold">Amount</th>
-
+                <th></th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let ax of genExs">
-                <td>{{ax.description}}</td>
-                <td>{{ax.expenseDate}}</td>
-                <td>{{ax.purpose}}</td>
-                <td><label class="badge bg-orange p-2">{{ax.amount}}</label></td>
+              <!--<tr *ngFor="let ax of filteredGenExs | async; index as i">-->
+              <tr *ngFor="let ax of filteredGenExs | async">
+                <td>
+                  <!--{{ax.description}}-->
+                  <ngb-highlight [result]="ax.description" [term]="filter.value"></ngb-highlight>
+                 <!-- <ngb-highlight [result]="ax.description" [term]="genServices.searchTerm"></ngb-highlight>-->
+                  
+                </td>
+                <td>
+                  {{ax.expenseDate | date}}
+                  <!--<ngb-highlight [result]="ax.expenseDate" [term]="filter.value"></ngb-highlight>-->
+                  
+                </td>
+                <td>
+                  <!--{{ax.purpose}}-->
+                  <ngb-highlight [result]="ax.purpose" [term]="filter.value"></ngb-highlight>
+                 
+                </td>
+                <td>
+                  <label class="badge badge-warning p-2">
+                    <i class="mdi mdi-currency-ngn"></i>
+                    <!--{{ax.amount}}-->
+                    <ngb-highlight [result]="ax.amount | number" [term]="filter.value"></ngb-highlight>
+                    
+                  </label>
+                </td>
+                <td>
+                  <a [routerLink]="['/genexpense-detail', ax.id]" class="mr-5 text-primary" title="Detail">
+                    <i class="mdi mdi-book-open-page-variant"></i>
+                  </a>
+
+                  <a (click)="deleteGenExpense()" class="text-danger" title="Remove">
+                    <i class="mdi mdi-close"></i>
+                  </a>
+                </td>
               </tr>
             </tbody>
           </table>
+
+
+          <div class="d-flex justify-content-between p-2">
+            <ngb-pagination [collectionSize]="(collectionSize | async)!" [(page)]="page" [pageSize]="pageSize" (pageChange)="refreshExpenses()">
+            </ngb-pagination>
+
+            <select class="custom-select" style="width: auto" name="pageSize" [(ngModel)]="genServices.pageSize">
+              <option [ngValue]="2">2 items per page</option>
+              <option [ngValue]="4">4 items per page</option>
+              <option [ngValue]="6">6 items per page</option>
+            </select>
+          </div>
 
         </div>
       </div>
@@ -96,27 +187,40 @@
 
     <form novalidate [formGroup]="genExForm" (ngSubmit)="saveExpense()">
 
-        <div class="form-group">
-          <label for="expenseDateId">Select Date</label>
-          <div class="form-inline">
-              <input type="text" class="form-control" placeholder="DD/MM/YYYY"
-              formControlName="expenseDate" ngbDatepicker #d2="ngbDatepicker">
-              <div class="input-group-append">
-                <button class="btn btn-outline-secondary mdi mdi-calendar" (click)="d2.toggle()" type="button"></button>
-              </div>
-              <hr/>
-              <hr/>
+      <!--<div class="form-group">
+        <label for="expenseDateId">Select Date</label>
+        <div class="form-inline">
+          <input type="text" class="form-control" placeholder="DD/MM/YYYY"
+                 formControlName="expenseDate" ngbDatepicker #d2="ngbDatepicker">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary mdi mdi-calendar" (click)="d2.toggle()" type="button"></button>
           </div>
-          <span class="invalid-feedback">
-            {{displayMessage.expenseDate}}
-          </span>
+          <hr />
+          <hr />
         </div>
+        <span class="invalid-feedback">
+          {{displayMessage.expenseDate}}
+        </span>
+      </div>-->
+
+      <div class="form-group">
+        <label for="expenseDateId">Date</label>
+        <input type="text" class="form-control"
+               placeholder="Date (required)"
+               formControlName="expenseDate" bsDatepicker
+               [bsConfig]="{containerClass: 'theme-default',
+              dateInputFormat: 'DD-MM-YYYY'}"
+               [ngClass]="{'is-invalid': displayMessage.expenseDate }">
+        <span class="invalid-feedback">
+          {{displayMessage.expenseDate}}
+        </span>
+      </div>
 
       <div class="form-group">
         <label for="amountId">Amount</label>
         <input type="number" class="form-control"
-        id="amountId" placeholder="Amount (required)"
-        formControlName="amount" [ngClass]="{'is-invalid': displayMessage.amount }">
+               id="amountId" placeholder="Amount (required)"
+               formControlName="amount" [ngClass]="{'is-invalid': displayMessage.amount }">
         <span class="invalid-feedback">
           {{displayMessage.amount}}
         </span>
@@ -125,8 +229,8 @@
       <div class="form-group">
         <label for="descriptionId">Description</label>
         <textarea type="text" class="form-control"
-        id="descriptionId" placeholder="Description (required)"
-        formControlName="description" [ngClass]="{'is-invalid': displayMessage.description }">
+                  id="descriptionId" placeholder="Description (required)"
+                  formControlName="description" [ngClass]="{'is-invalid': displayMessage.description }">
       </textarea>
         <span class="invalid-feedback">
           {{displayMessage.description}}
@@ -136,8 +240,8 @@
       <div class="form-group">
         <label for="purposeId">Purpose</label>
         <textarea type="text" class="form-control"
-        id="puposeId" placeholder="Purpose (required)"
-        formControlName="purpose" [ngClass]="{'is-invalid': displayMessage.purpose }">
+                  id="puposeId" placeholder="Purpose (required)"
+                  formControlName="purpose" [ngClass]="{'is-invalid': displayMessage.purpose }">
       </textarea>
         <span class="invalid-feedback">
           {{displayMessage.description}}
@@ -145,10 +249,10 @@
       </div>
 
       <button type="submit" class="btn btn-primary btn-rounded btn-fw mr-2"
-      [title]="genExForm.valid ? 'Save Entry': 'Disabled until form data is valid'"
-      [disabled]="!genExForm.valid">
+              [title]="genExForm.valid ? 'Save Entry': 'Disabled until form data is valid'"
+              [disabled]="!genExForm.valid">
         Submit
-    </button>
+      </button>
 
     </form>
 
